@@ -2,6 +2,7 @@ import tkinter as tki
 from PIL import Image
 from PIL import ImageTk
 from tkinter import filedialog
+from tkinter import simpledialog
 
 class editorScene:
 
@@ -26,7 +27,7 @@ class editorScene:
         #self.savePhoto = self.savePhoto.subsample(320)
 
         toolbar = tki.Frame(self.root, bg='white')
-        saveCode = tki.Button(toolbar, image=self.savePhoto, borderwidth=0,bg='grey', text='save')
+        saveCode = tki.Button(toolbar, image=self.savePhoto, borderwidth=0,bg='grey', text='save', command=self.saveFile)
         #saveCode.config(width=16,height=8)
         saveCode.pack(side=tki.LEFT)
 
@@ -71,9 +72,17 @@ class editorScene:
         self.txt.grid(row=0, column=0, sticky="nsew", padx=2, pady=2)
 
         # create a Scrollbar and associate it with txt
-        self.scrollb = tki.Scrollbar(txt_frm, command= self.txt.yview)    
+        self.scrollb = tki.Scrollbar(txt_frm, command= self.txt.yview, bg="#777777")    
         self.scrollb.grid(row=0, column=1, sticky='nsew')
         self.txt['yscrollcommand'] = self.scrollb.set
+        
+    def saveFile(self):
+
+        answer = simpledialog.askstring("Input", "File name:", parent=self.root)
+
+        if answer is not None:
+            with open(answer+".fuck", 'a') as fout:
+                fout.write(self.txt.get("1.0",tki.END)) 
 
     def importFiles(self):
         self.filename = filedialog.askopenfilename()
@@ -82,8 +91,11 @@ class editorScene:
         # once opened file:
         try:
             with open(self.filename, 'r') as f:
-                print(f.read())
-                self.txt.insert('1.0', f.read()) ## TODO: feeh 7aga 5ara!
+                #print(f.read())
+                 ## TODO: feeh 7aga 5ara!
+                self.txt.delete(1.0,tki.END)
+                self.txt.insert(tki.END, f.read())
+
         except FileExistsError: 
             print("Could Not Read File")
 
