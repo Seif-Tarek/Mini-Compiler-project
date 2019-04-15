@@ -26,13 +26,15 @@ Tool_Ma                      {return WHILE_LOOP_STATEMENT_TOKEN;}
 E3mly                        {return DO_STATEMENT_TOKEN;}
 E3ml                         {return SCOPE_START_TOKEN;}
 Bas                          {return SCOPE_END_TOKEN;}
+True                         {yylval.BOOOL = 1; return TrueFalse;}
+False                        {yylval.BOOOL = 2; return TrueFalse;}
 \|\|                         {return OR;}
 &&                           {return AND;}
 !                            {return NOT;}
-\<\<                           {return SHIFT_LEFT;}
-\>\>                           {return SHIFT_RIGHT;}
-\>=                           {return GREATER_THAN_EQUAL;}
-\<=                           {return LESS_THAN_EQUAL;}
+\<\<                         {return SHIFT_LEFT;}
+\>\>                         {return SHIFT_RIGHT;}
+\>=                          {return GREATER_THAN_EQUAL;}
+\<=                          {return LESS_THAN_EQUAL;}
 ==                           {return EQUAL_EQUAL;}
 !=                           {return NOT_EQUAL;}
 [_a-zA-Z][a-zA-Z0-9\._]*     {yylval.VARIABLE = yytext; return IDENTIFIER_TOKEN;}
@@ -40,7 +42,6 @@ Bas                          {return SCOPE_END_TOKEN;}
 [ \t\n]                      ;
 [\+\-*/%=()|&^<>]            {return yytext[0];}
 [0-9]+\.[0-9]+               {yylval.DOOBLE = atof(yytext); return DOUBE_FLOATING_POINT;}
-(true|false)                 {yylval.BOOOL = atof(yytext); return TrueFalse;}
 '.'                          {yylval.LETTER = yytext[1]; return CHARACTER_VALUE;}
 \".*\"                         {yylval.VARIABLE = yytext; return STRING_VALUE;}
 ;                            {return STATEMENT_TERMINATOR_TOKEN;}

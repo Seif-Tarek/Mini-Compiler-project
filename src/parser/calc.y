@@ -250,5 +250,18 @@ int main (void) {
 	return yyparse ( );
 }
 
-void yyerror (char *s) {fprintf (stderr, "%s\n", s);} 
+void yyerror (char *s) {
+
+	// open file in append mode, and add the error to it!
+	FILE* f;
+	f = fopen("lexerOut2.txt","a");
+
+	if(f==NULL){
+
+	fprintf (stderr, "%s\n", s);
+	}
+	fprintf(f,"Syntax Error");
+	fclose(f);
+
+} 
 
