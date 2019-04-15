@@ -85,24 +85,24 @@ void updateSymbolVal(char symbol, int val);
 
 /* descriptions of expected inputs     corresponding actions (in C) */
 
-line    : assignment STATEMENT_TERMINATOR_TOKEN			{;}
-		| exit_command STATEMENT_TERMINATOR_TOKEN		{exit(EXIT_SUCCESS);}
-		| declaration STATEMENT_TERMINATOR_TOKEN		{;}
-		| line declaration STATEMENT_TERMINATOR_TOKEN	{;}
-		| line assignment STATEMENT_TERMINATOR_TOKEN	{;}
-		| line for_statement 							{;}
-		| for_statement									{;}
-		| line if_statement								{;}
-		| if_statement									{;}
-		| line switch_statement							{;}
-		| switch_statement								{;}
-		| line while_statement							{;}
-		| while_statement								{;}
-		| line repeat_statement							{;}
-		| repeat_statement								{;}
-		| line exit_command STATEMENT_TERMINATOR_TOKEN	{exit(EXIT_SUCCESS);}
-		| STATEMENT_TERMINATOR_TOKEN 					{;}
-		| line expbitwise STATEMENT_TERMINATOR_TOKEN 	{;}
+line    : assignment STATEMENT_TERMINATOR_TOKEN			{printf("Matched assignment\n");}
+		| exit_command STATEMENT_TERMINATOR_TOKEN		{printf("Matched fedahya\n");exit(EXIT_SUCCESS);}
+		| declaration STATEMENT_TERMINATOR_TOKEN		{printf("Matched Declarations\n");}
+		| line declaration STATEMENT_TERMINATOR_TOKEN	{printf("Matched Declarations\n");}
+		| line assignment STATEMENT_TERMINATOR_TOKEN	{printf("Matched assignment\n");;}
+		| line for_statement 							{printf("Matched loop: for\n");}
+		| for_statement									{printf("Matched loop: for\n");;}
+		| line if_statement								{printf("Matched flow control: if\n");;}
+		| if_statement									{printf("Matched flow control: if\n");}
+		| line switch_statement							{printf("Matched flow control: switch\n");}
+		| switch_statement								{printf("Matched flow control: switch\n");}
+		| line while_statement							{printf("Matched loop: while\n");}
+		| while_statement								{printf("Matched loop: while\n");}
+		| line repeat_statement							{printf("Matched loop: do-while\n");}
+		| repeat_statement								{printf("Matched loop: do-while\n");}
+		| line exit_command STATEMENT_TERMINATOR_TOKEN	{printf("Matched fedahya\n");exit(EXIT_SUCCESS);}
+		| STATEMENT_TERMINATOR_TOKEN 					{printf("Matched Empty statement\n");}
+		| line expbitwise STATEMENT_TERMINATOR_TOKEN 	{printf("Matched Expression Statement\n");}
         ;
 		
 // Decalarations of variables and constants:

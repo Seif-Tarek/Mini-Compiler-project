@@ -8,4 +8,4 @@ gcc lex.yy.c y.tab.c -o out
 
 echo 'Building complete....'
 
-./out
+./out<input.txt

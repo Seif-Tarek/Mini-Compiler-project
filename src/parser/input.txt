@@ -1,0 +1,8 @@
+Rakam x = 10;
+
+Law(x == 100) E3ml
+
+    Lef_3ala(Y=10;Y<1000;Y=Y+1) E3ml
+        ;
+    Bas
+Bas
