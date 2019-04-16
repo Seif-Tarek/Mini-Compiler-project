@@ -12,30 +12,17 @@ class editorScene:
     def __init__(self):
         # * create a Frame for the Text and Scrollbar
         self.root = tki.Tk()
-        self.root.title('Super Nebula')
-        self.filename = None
-        # ! self.root.iconbitmap(r'/media/ahelady/New Volume/lectures and assignements/Spring 2019/Compilers/Project/editor/img/save.ico')
-        
+        self.root.title('Super Nebula Language IDE')
+        self.filename = None        
         self.addItems()
 
     def addItems(self):
 
         ## add a tool bar with compile, import and save buttons:
-
-        '''self.savePhoto = tki.PhotoImage(file='saveIcon.png')
-        self.savePhoto.config(width=25, height=20)
-
-        self.supernebulaPhoto = tki.PhotoImage(file='saveIcon.png')
-        self.supernebulaPhoto.config(width=25, height=20) '''
-
-        #self.savePhoto = self.savePhoto.subsample(320)
-
         toolbar = tki.Frame(self.root, bg='white')
         saveCode = tki.Button(toolbar, borderwidth=0,bg='grey', text='save', command=self.saveFile)
-        #saveCode.config(width=16,height=8)
+    
         saveCode.pack(side=tki.LEFT)
-
-       
         
         compileCode = tki.Button(toolbar,bg='grey', text='Compile',command=self.compile_)
         compileCode.pack(side=tki.LEFT)
@@ -43,13 +30,20 @@ class editorScene:
         importCode = tki.Button(toolbar,bg='grey', text='import',command=self.importFiles)
         importCode.pack(side=tki.LEFT)
 
+        showLogFile = tki.Button(toolbar,bg='grey', text='Error List',command=self.showLogFile)
+        showLogFile.pack(side=tki.LEFT)
+
+        
+        run = tki.Button(toolbar,bg='grey', text='run',command=self.runproject)
+        run.pack(side=tki.LEFT)
+
+
         helpWithSyntax = tki.Button(toolbar,bg='grey', text='help')
         helpWithSyntax.pack(side=tki.RIGHT)
 
-        textLabel = tki.Label(toolbar, bg='white', text='     Super Nebula Language IDE', font="-weight bold -family monospace")
+        textLabel = tki.Label(toolbar, bg='white', text="", font="-weight bold -family monospace")
         textLabel.pack(side=tki.LEFT, fill=tki.X)
         toolbar.pack(side=tki.TOP, fill=tki.X, pady=1)
-
 
         ## -------------------------- Status Bar ---------------------------------------
         statusbar = tki.Frame(self.root, bg='#1E407C')
@@ -59,8 +53,8 @@ class editorScene:
 
         statusbar.pack(side=tki.BOTTOM,fill=tki.X)
 
-        ## creating a text format:
-        txt_frm = tki.Frame(self.root, width=600, height=600)
+          ## creating a text format:
+        txt_frm = tki.Frame(self.root, width=600, height=500)
         txt_frm.pack(fill="both", expand=True)
         
         # ensure a consistent GUI size
@@ -83,6 +77,36 @@ class editorScene:
         # configuring a tag with a certain style (font color)
         self.txt.tag_configure("highlight", foreground="green")
 
+
+
+        #####################################################
+        ## creating a text format:
+        txt_frm2 = tki.Frame(self.root, width=600, height=300)
+        txt_frm2.pack(fill="both", expand=True)
+        
+        # ensure a consistent GUI size
+        txt_frm2.grid_propagate(False)
+        
+        # implement stretchability
+        txt_frm2.grid_rowconfigure(0, weight=1)
+        txt_frm2.grid_columnconfigure(0, weight=1)
+
+        # create a Text widget
+        self.txt2 = tki.Text(txt_frm2, borderwidth=3, relief="sunken", fg='#FFFFFF', bg='#333333', font='-size 12 -family sans-serif')
+        self.txt2.config(font=("consolas", 12), undo=True, wrap='word')
+        self.txt2.grid(row=0, column=0, sticky="nsew", padx=2, pady=2)
+
+        # create a Scrollbar and associate it with txt
+        self.scrollb2 = tki.Scrollbar(txt_frm2, command= self.txt2.yview, bg="#777777")    
+        self.scrollb2.grid(row=0, column=1, sticky='nsew')
+        self.txt2['yscrollcommand'] = self.scrollb2.set
+
+        # configuring a tag with a certain style (font color)
+        self.txt2.tag_configure("highlight", foreground="green")
+
+
+      
+
     def saveFile(self):
 
         if self.filename is None:
@@ -92,6 +116,7 @@ class editorScene:
         if self.filename is  not None:
             with open( self.filename, 'w') as fout: ## TODO: Change Extension for our files
                 fout.write(self.txt.get("1.0",tki.END)) 
+                self.compiledLabel['text']  = " Saved!"   
 
         ## TODO: if we can, chanege color of text by regex
         ''' char_count = tki.IntVar()
@@ -103,8 +128,6 @@ class editorScene:
             end = "%s + %d chars" % (index, char_count.get()-7)
             self.txt.tag_add("highlight", start, end)
         '''
-
-        
 
     def importFiles(self):
         self.filename = filedialog.askopenfilename()
@@ -136,11 +159,24 @@ class editorScene:
         try:
             with open("lexerOut2.txt", 'r') as f:
                 # then it should have an error!!
-                tki.messagebox.showerror("Error!", "Syntax Error Occurred! Parsing Failed Successfully :'( ")
-                self.compiledLabel['text'] = " Syntax Error Occurred!"
+                tki.messagebox.showerror("Parsing Error!", "Building project failed!")
+                self.compiledLabel['text'] = " build failed!"
+                self.txt2.delete(1.0,tki.END)
+                self.txt2.insert(tki.END, f.read())
         except FileNotFoundError: 
+            self.txt2.delete(1.0,tki.END)
             self.compiledLabel['text']  = " compiled successfully!"                 
 
-             
+    def showLogFile(self):
+        try:
+            with open("lexerOut2.txt", 'r') as f:
+                # then it should have an error!!
+                tki.messagebox.showinfo("Nebula Logger", f.readlines())
+        except FileNotFoundError:
+                tki.messagebox.showwarning("Nebula Logger", "Logger Not Ready, re-compile project and try again!") 
+
+    def runproject(self):
+        tki.messagebox.showinfo("Nebula Runtime Environment", "Functionality is not supported yet!")
 scene = editorScene()
+
 scene.root.mainloop()
