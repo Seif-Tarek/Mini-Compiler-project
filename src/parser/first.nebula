@@ -1,15 +1,48 @@
-Rakam x = 10;
-7rf k = 'k';
-K1lma c = "Kalaaam";
-Lef_3ala(x=0;x<10;x=x+1)E3ml
-	Law(x==0)E3ml
-		x=1;
-		
+Lma(x)Yb2a
+(0) E3ml
+		x=0;
+		Law(x>3)E3ml
+			Lef_3ala(Rakam y=10; y<10; y=y*2)E3ml
+				y=y/2;
+					Lef_3ala(Rakam y=10; y<10; y=y*2)E3ml
+						y=y/2;
+					Bas
+					Lma(Word)Yb2a
+					("Yahia") E3ml
+						Kelma Word_New = "Hi";
+					Bas
+					("Salem") E3ml
+						3ashry Y = 33.44;
+					Bas
+					("Andrew") E3ml
+						Rakam Z = 33;
+					Bas
+					("Seif") E3ml
+						;
+					Bas
+					8ear_Kda 
+						x=4;
+					5las
+
+			Bas
+		Bas
 	Bas
-Bas
+	8ear_Kda 
+		x=0;
+5las
 
 
+E3mly
+	Law(x>3)E3ml
+			;
+	Bas
 
+	y=0;
+	Lef_3ala(Rakam y=10; y<10; y=y*2)E3ml
+		y=y/2;
+	Bas
+	x=x+1;
+Tool_Ma(x<3);
 
 
 
