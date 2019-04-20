@@ -3,15 +3,18 @@ from PIL import Image
 from PIL import ImageTk
 from tkinter import filedialog
 from tkinter import simpledialog
+from tkinter.font import Font
+import os,sys
 
 class editorScene:
 
     def __init__(self):
-
-        # create a Frame for the Text and Scrollbar
+        # * create a Frame for the Text and Scrollbar
         self.root = tki.Tk()
         self.root.title('Super Nebula')
-        #self.root.iconbitmap(r'/media/ahelady/New Volume/lectures and assignements/Spring 2019/Compilers/Project/editor/img/save.ico')
+      
+        # ! self.root.iconbitmap(r'/media/ahelady/New Volume/lectures and assignements/Spring 2019/Compilers/Project/editor/img/save.ico')
+        
         self.addItems()
 
     def addItems(self):
@@ -27,13 +30,13 @@ class editorScene:
         #self.savePhoto = self.savePhoto.subsample(320)
 
         toolbar = tki.Frame(self.root, bg='white')
-        saveCode = tki.Button(toolbar, image=self.savePhoto, borderwidth=0,bg='grey', text='save', command=self.saveFile)
+        saveCode = tki.Button(toolbar, borderwidth=0,bg='grey', text='save', command=self.saveFile)
         #saveCode.config(width=16,height=8)
         saveCode.pack(side=tki.LEFT)
 
        
         
-        compileCode = tki.Button(toolbar,bg='grey', text='Compile')
+        compileCode = tki.Button(toolbar,bg='grey', text='Compile',command=self.compile_)
         compileCode.pack(side=tki.LEFT)
 
         importCode = tki.Button(toolbar,bg='grey', text='import',command=self.importFiles)
@@ -75,14 +78,30 @@ class editorScene:
         self.scrollb = tki.Scrollbar(txt_frm, command= self.txt.yview, bg="#777777")    
         self.scrollb.grid(row=0, column=1, sticky='nsew')
         self.txt['yscrollcommand'] = self.scrollb.set
-        
+
+        # configuring a tag with a certain style (font color)
+        self.txt.tag_configure("highlight", foreground="green")
+
     def saveFile(self):
 
         answer = simpledialog.askstring("Input", "File name:", parent=self.root)
 
         if answer is not None:
-            with open(answer+".fuck", 'a') as fout:
+            with open( answer+".nebula", 'a') as fout: ## TODO: Change Extension for our files
                 fout.write(self.txt.get("1.0",tki.END)) 
+
+        ## TODO: if we can, chanege color of text by regex
+        ''' char_count = tki.IntVar()
+        index = self.txt.search(r'pragma', "1.0", "end", count=char_count, regexp=True)
+        print(index)
+        # we have to adjust the character indexes to skip over the identifiers
+        if index != "":
+            start = "%s + 6 chars" % index
+            end = "%s + %d chars" % (index, char_count.get()-7)
+            self.txt.tag_add("highlight", start, end)
+        '''
+
+        self.filename = answer + ".nebula"
 
     def importFiles(self):
         self.filename = filedialog.askopenfilename()
@@ -99,5 +118,8 @@ class editorScene:
         except FileExistsError: 
             print("Could Not Read File")
 
+    def compile_(self):
+        os.system("./runnerlinux.sh "+self.filename)
+             
 scene = editorScene()
 scene.root.mainloop()
