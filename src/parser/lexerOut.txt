@@ -1,1 +1,4 @@
-:
+i matched double 4.200000
+i matched double 2.000000
+matched double value expression 6.200000
+Matched assignment

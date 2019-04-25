@@ -16,6 +16,6 @@ echo 'Started Building......'
 rm lexerOut2.txt
 flex calc.l
 bison -dy calc.y
-gcc lex.yy.c y.tab.c -o out
+g++ -std=c++11 lex.yy.c y.tab.c -o out
 ./out < first.nebula > lexerOut.txt
 
