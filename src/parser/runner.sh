@@ -16,6 +16,6 @@ echo '
 echo 'started Building.....';
 flex calc.l;
 bison -dy calc.y;
-gcc lex.yy.c y.tab.c -o out;
+g++ lex.yy.c y.tab.c -o out;
 echo 'Building complete....';
 ./out < $1;

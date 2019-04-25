@@ -79,7 +79,10 @@ void updateSymbolVal(char symbol, int val);
 
 	%type <VARIABLE> assignment  //Needs editing
 	%type <NUM> line exp expbitwise expAddSubtract term factor component
+	%type <DOOBLE>  double_value_exp  double_value_expAddSubtract double_value_term double_value_factor double_value_component
+
 	%type <BOOOL>  Bexp Bexp1 Bexpand Bexpbracket // 0 or 1 integers.
+	%type <VARIABLE> string_value_assignment
 	/// EDITTTTTTTTTTTTTTTTTTTT
 %%
 
@@ -119,10 +122,18 @@ data_type: Rakam 		{;}
 		;		
 
 assignment : IDENTIFIER_TOKEN '=' assingment_value {;} //updateSymbolVal($1,$3); } // TODO: gowa el function law el variable msh mawgood, zawedo
+		| IDENTIFIER_TOKEN '=' string_value_assignment { printf("string is matched %s\n",$3);}
 		;
 
 assingment_value: expbitwise 	{;}
+		| double_value_exp		{; printf("matched double value expression %f\n",$1);}
 		| Bexp1					{;}
+		;
+
+string_value_assignment:  STRING_VALUE			{
+													$$ = $1;
+													printf("matched string value %s\n",$1); 
+												}
 		;
 
 // Flow Control Statements:
@@ -134,7 +145,7 @@ if_statement: IF_STATEMENT_TOKEN '('Bexp')' SCOPE_START_TOKEN line SCOPE_END_TOK
 		;
 
 // 2. switch case:
-switch_statement: SWITCH_CASE_BEGINNING_TOKEN '('IDENTIFIER_TOKEN')' SWITCH_CASE_START_CASES_TOKEN case_statement SWITCH_DEFAULT_CASE_BEGINNING_TOKEN line SWITCH_CASE_END_CASES_TOKEN {;}
+switch_statement: SWITCH_CASE_BEGINNING_TOKEN '('IDENTIFIER_TOKEN')' SWITCH_CASE_START_CASES_TOKEN ':' case_statement SWITCH_DEFAULT_CASE_BEGINNING_TOKEN line SWITCH_CASE_END_CASES_TOKEN {;}
 		;
 
 case_statement: case_statement '('term')'  SCOPE_START_TOKEN line SCOPE_END_TOKEN | '('term')'  SCOPE_START_TOKEN line SCOPE_END_TOKEN 	{;}
@@ -166,14 +177,28 @@ exp    	: expAddSubtract                		  {$$ = $1;}
        	| exp SHIFT_RIGHT expAddSubtract          {$$ = $1 >> $3;}
        	;
 
+double_value_exp    	: double_value_expAddSubtract                		  {;}
+       	| double_value_exp  double_value_expAddSubtract           {;}
+       	;
+
 expAddSubtract  : component                  {$$ = $1;}
 			    | expAddSubtract '+' component          {$$ = $1 + $3;}
 				| expAddSubtract '-' component          {$$ = $1 - $3;}
 				;
 
+double_value_expAddSubtract  : double_value_component                  {$$ = $1;}
+			    | double_value_expAddSubtract '+' double_value_component          {$$ = $1 + $3; }
+				| double_value_expAddSubtract '-' double_value_component          {$$ = $1 - $3;}
+				;
+
 component   : component '*' factor       {$$ = $1 * $3;}
  			| component '/' factor       {$$ = $1 / $3;}
 	    	| factor                     {$$ = $1;}
+	    	;
+
+double_value_component   : double_value_component '*' double_value_factor       {$$ = $1 * $3;}
+ 			| double_value_component '/' double_value_factor       {$$ = $1 / $3;}
+	    	| double_value_factor                     {$$ = $1;}
 	    	;
 
 factor  : '(' expbitwise ')'            {$$ = $2;}
@@ -182,14 +207,23 @@ factor  : '(' expbitwise ')'            {$$ = $2;}
 	    | term                   {$$ = $1;}
  		;
  
+double_value_factor  : '(' double_value_exp ')'		{$$ = $2;}
+	    | double_value_term                   		{$$ = $1;}
+ 		;
 		
-term   	: LONG_INTEGER          {$$ = $1;}
-		| DOUBE_FLOATING_POINT 	{$$ = $1;}
+term   	: LONG_INTEGER          {$$ = $1; printf("i matched integer %d\n",$1);}
 		| CHARACTER_VALUE		{$$ = $1;}
-		| STRING_VALUE			{;}
 		| TrueFalse				{$$ = $1;}
-		| IDENTIFIER_TOKEN		{;}//$$ = symbolVal($1);} 
+		| IDENTIFIER_TOKEN		{;}//$$ = symbolVal($1);
+		
+		// if the matched identifier refers to String type:
+			// return the address of this string as a long, pass it to the one we assign it to
+		
+		
         ;
+
+double_value_term: DOUBE_FLOATING_POINT 	{$$ = $1; printf("i matched double %f\n",$1);}
+		;
 
 // Afsel 3shan al precedance.
 Bexp	: exp '>' exp					{$$ = $1 > $3;}
@@ -198,6 +232,12 @@ Bexp	: exp '>' exp					{$$ = $1 > $3;}
 		| exp LESS_THAN_EQUAL exp		{$$ = $1 <= $3;}
 		| exp EQUAL_EQUAL exp			{$$ = $1 == $3;}
 		| exp NOT_EQUAL exp				{$$ = $1 != $3;}
+		| double_value_exp '>' double_value_exp					{$$ = $1 > $3;}
+ 		| double_value_exp GREATER_THAN_EQUAL double_value_exp	{$$ = $1 >= $3;}
+	    | double_value_exp '<' double_value_exp					{$$ = $1 < $3;}
+		| double_value_exp LESS_THAN_EQUAL double_value_exp		{$$ = $1 <= $3;}
+		| double_value_exp EQUAL_EQUAL double_value_exp			{$$ = $1 == $3;}
+		| double_value_exp NOT_EQUAL double_value_exp			{$$ = $1 != $3;}
 		;
 
 Bexp1	: Bexp1 OR Bexpand					{$$ = $1 || $3;}

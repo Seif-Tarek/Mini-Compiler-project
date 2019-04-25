@@ -1,21 +1,4 @@
+i matched double 4.200000
+i matched double 2.000000
+matched double value expression 6.200000
 Matched assignment
-Matched assignment
-Matched assignment
-Matched loop: for
-Matched Declarations
-Matched Declarations
-Matched Declarations
-Matched Empty statement
-Matched assignment
-Matched flow control: switch
-Matched loop: for
-Matched flow control: if
-Matched assignment
-Matched flow control: switch
-Matched Empty statement
-Matched flow control: if
-Matched assignment
-Matched assignment
-Matched loop: for
-Matched assignment
-Matched loop: do-while
