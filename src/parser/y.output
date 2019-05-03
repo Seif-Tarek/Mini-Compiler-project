@@ -1,0 +1,3199 @@
+Terminals unused in grammar
+
+   TOKEN_Atba3
+
+
+Grammar
+
+    0 $accept: line $end
+
+    1 line: assignment STATEMENT_TERMINATOR_TOKEN
+    2     | exit_command STATEMENT_TERMINATOR_TOKEN
+    3     | declaration STATEMENT_TERMINATOR_TOKEN
+    4     | line declaration STATEMENT_TERMINATOR_TOKEN
+    5     | line assignment STATEMENT_TERMINATOR_TOKEN
+    6     | line for_statement
+    7     | for_statement
+    8     | line if_statement
+    9     | if_statement
+   10     | line switch_statement
+   11     | switch_statement
+   12     | line while_statement
+   13     | while_statement
+   14     | line repeat_statement
+   15     | repeat_statement
+   16     | line exit_command STATEMENT_TERMINATOR_TOKEN
+   17     | STATEMENT_TERMINATOR_TOKEN
+   18     | line expbitwise STATEMENT_TERMINATOR_TOKEN
+   19     | line double_value_expAddSubtract STATEMENT_TERMINATOR_TOKEN
+   20     | double_value_expAddSubtract STATEMENT_TERMINATOR_TOKEN
+
+   21 declaration: data_type IDENTIFIER_TOKEN
+   22            | data_type assignment
+   23            | CONSTANT_TOKEN data_type assignment
+
+   24 data_type: Rakam
+   25          | TOKEN_3ashry
+   26          | TOKEN_Boolean
+   27          | TOKEN_Harf
+   28          | TOKEN_Hroof
+
+   29 assignment: IDENTIFIER_TOKEN '=' expbitwise
+   30           | IDENTIFIER_TOKEN '=' double_value_expAddSubtract
+   31           | IDENTIFIER_TOKEN '=' Bexp1
+   32           | IDENTIFIER_TOKEN '=' string_value_assignment
+
+   33 string_value_assignment: STRING_VALUE
+
+   34 if_statement: IF_STATEMENT_TOKEN '(' Bexp ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+   35             | if_statement ELSE_STATEMENT_TOKEN SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+   36 switch_statement: SWITCH_CASE_BEGINNING_TOKEN '(' IDENTIFIER_TOKEN ')' SWITCH_CASE_START_CASES_TOKEN ':' case_statement SWITCH_DEFAULT_CASE_BEGINNING_TOKEN line SWITCH_CASE_END_CASES_TOKEN
+
+   37 case_statement: case_statement '(' term ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+   38               | '(' term ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+   39 for_iterator: assignment
+   40             | declaration
+
+   41 for_statement: FOR_LOOP_STATMENT_TOKEN '(' for_iterator STATEMENT_TERMINATOR_TOKEN Bexp1 STATEMENT_TERMINATOR_TOKEN assignment ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+   42 while_statement: WHILE_LOOP_STATEMENT_TOKEN '(' Bexp1 ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+   43 repeat_statement: DO_STATEMENT_TOKEN line WHILE_LOOP_STATEMENT_TOKEN '(' Bexp1 ')' STATEMENT_TERMINATOR_TOKEN
+
+   44 expbitwise: expbitwise '|' exp
+   45           | expbitwise '&' exp
+   46           | expbitwise '^' exp
+   47           | exp
+
+   48 exp: expAddSubtract
+   49    | exp SHIFT_LEFT expAddSubtract
+   50    | exp SHIFT_RIGHT expAddSubtract
+
+   51 expAddSubtract: component
+   52               | expAddSubtract '+' component
+   53               | expAddSubtract '-' component
+
+   54 double_value_expAddSubtract: double_value_expAddSubtract '+' double_value_component
+   55                            | double_value_expAddSubtract '-' double_value_component
+   56                            | double_value_component
+
+   57 component: component '*' factor
+   58          | component '/' factor
+   59          | factor
+
+   60 double_value_component: double_value_component '*' double_value_factor
+   61                       | double_value_component '/' double_value_factor
+   62                       | double_value_factor
+
+   63 factor: '(' expbitwise ')'
+   64       | '-' factor
+   65       | '~' factor
+   66       | term
+
+   67 double_value_factor: '(' double_value_expAddSubtract ')'
+   68                    | double_value_term
+   69                    | '-' double_value_factor
+
+   70 term: LONG_INTEGER
+   71     | CHARACTER_VALUE
+   72     | TrueFalse
+   73     | IDENTIFIER_TOKEN
+
+   74 double_value_term: DOUBE_FLOATING_POINT
+
+   75 Bexp: exp '>' exp
+   76     | exp GREATER_THAN_EQUAL exp
+   77     | exp '<' exp
+   78     | exp LESS_THAN_EQUAL exp
+   79     | exp EQUAL_EQUAL exp
+   80     | exp NOT_EQUAL exp
+   81     | double_value_expAddSubtract '>' double_value_expAddSubtract
+   82     | double_value_expAddSubtract GREATER_THAN_EQUAL double_value_expAddSubtract
+   83     | double_value_expAddSubtract '<' double_value_expAddSubtract
+   84     | double_value_expAddSubtract LESS_THAN_EQUAL double_value_expAddSubtract
+   85     | double_value_expAddSubtract EQUAL_EQUAL double_value_expAddSubtract
+   86     | double_value_expAddSubtract NOT_EQUAL double_value_expAddSubtract
+
+   87 Bexp1: Bexp1 OR Bexpand
+   88      | Bexpand
+
+   89 Bexpand: Bexpand AND Bexpbracket
+   90        | Bexpbracket
+
+   91 Bexpbracket: '(' Bexp1 ')'
+   92            | NOT Bexpbracket
+   93            | Bexp
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'&' (38) 45
+'(' (40) 34 36 37 38 41 42 43 63 67 91
+')' (41) 34 36 37 38 41 42 43 63 67 91
+'*' (42) 57 60
+'+' (43) 52 54
+'-' (45) 53 55 64 69
+'/' (47) 58 61
+':' (58) 36
+'<' (60) 77 83
+'=' (61) 29 30 31 32
+'>' (62) 75 81
+'^' (94) 46
+'|' (124) 44
+'~' (126) 65
+error (256)
+exit_command (258) 2 16
+Rakam (259) 24
+TOKEN_Hroof (260) 28
+TOKEN_3ashry (261) 25
+TOKEN_Harf (262) 27
+TOKEN_Boolean (263) 26
+CONSTANT_TOKEN (264) 23
+TOKEN_Atba3 (265)
+LONG_INTEGER (266) 70
+DOUBE_FLOATING_POINT (267) 74
+STRING_VALUE (268) 33
+CHARACTER_VALUE (269) 71
+TrueFalse (270) 72
+SCOPE_START_TOKEN (271) 34 35 37 38 41 42
+SCOPE_END_TOKEN (272) 34 35 37 38 41 42
+STATEMENT_TERMINATOR_TOKEN (273) 1 2 3 4 5 16 17 18 19 20 41 43
+IF_STATEMENT_TOKEN (274) 34
+ELSE_STATEMENT_TOKEN (275) 35
+SWITCH_CASE_BEGINNING_TOKEN (276) 36
+SWITCH_CASE_START_CASES_TOKEN (277) 36
+SWITCH_CASE_END_CASES_TOKEN (278) 36
+SWITCH_DEFAULT_CASE_BEGINNING_TOKEN (279) 36
+FOR_LOOP_STATMENT_TOKEN (280) 41
+WHILE_LOOP_STATEMENT_TOKEN (281) 42 43
+DO_STATEMENT_TOKEN (282) 43
+IDENTIFIER_TOKEN (283) 21 29 30 31 32 36 73
+OR (284) 87
+AND (285) 89
+NOT (286) 92
+SHIFT_LEFT (287) 49
+SHIFT_RIGHT (288) 50
+GREATER_THAN_EQUAL (289) 76 82
+LESS_THAN_EQUAL (290) 78 84
+EQUAL_EQUAL (291) 79 85
+NOT_EQUAL (292) 80 86
+
+
+Nonterminals, with rules where they appear
+
+$accept (52)
+    on left: 0
+line (53)
+    on left: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20, on right:
+    0 4 5 6 8 10 12 14 16 18 19 34 35 36 37 38 41 42 43
+declaration (54)
+    on left: 21 22 23, on right: 3 4 40
+data_type (55)
+    on left: 24 25 26 27 28, on right: 21 22 23
+assignment (56)
+    on left: 29 30 31 32, on right: 1 5 22 23 39 41
+string_value_assignment (57)
+    on left: 33, on right: 32
+if_statement (58)
+    on left: 34 35, on right: 8 9 35
+switch_statement (59)
+    on left: 36, on right: 10 11
+case_statement (60)
+    on left: 37 38, on right: 36 37
+for_iterator (61)
+    on left: 39 40, on right: 41
+for_statement (62)
+    on left: 41, on right: 6 7
+while_statement (63)
+    on left: 42, on right: 12 13
+repeat_statement (64)
+    on left: 43, on right: 14 15
+expbitwise (65)
+    on left: 44 45 46 47, on right: 18 29 44 45 46 63
+exp (66)
+    on left: 48 49 50, on right: 44 45 46 47 49 50 75 76 77 78 79 80
+expAddSubtract (67)
+    on left: 51 52 53, on right: 48 49 50 52 53
+double_value_expAddSubtract (68)
+    on left: 54 55 56, on right: 19 20 30 54 55 67 81 82 83 84 85 86
+component (69)
+    on left: 57 58 59, on right: 51 52 53 57 58
+double_value_component (70)
+    on left: 60 61 62, on right: 54 55 56 60 61
+factor (71)
+    on left: 63 64 65 66, on right: 57 58 59 64 65
+double_value_factor (72)
+    on left: 67 68 69, on right: 60 61 62 69
+term (73)
+    on left: 70 71 72 73, on right: 37 38 66
+double_value_term (74)
+    on left: 74, on right: 68
+Bexp (75)
+    on left: 75 76 77 78 79 80 81 82 83 84 85 86, on right: 34 93
+Bexp1 (76)
+    on left: 87 88, on right: 31 41 42 43 87 91
+Bexpand (77)
+    on left: 89 90, on right: 87 88 89
+Bexpbracket (78)
+    on left: 91 92 93, on right: 89 90 92
+
+
+state 0
+
+    0 $accept: . line $end
+
+    exit_command                 shift, and go to state 1
+    Rakam                        shift, and go to state 2
+    TOKEN_Hroof                  shift, and go to state 3
+    TOKEN_3ashry                 shift, and go to state 4
+    TOKEN_Harf                   shift, and go to state 5
+    TOKEN_Boolean                shift, and go to state 6
+    CONSTANT_TOKEN               shift, and go to state 7
+    DOUBE_FLOATING_POINT         shift, and go to state 8
+    STATEMENT_TERMINATOR_TOKEN   shift, and go to state 9
+    IF_STATEMENT_TOKEN           shift, and go to state 10
+    SWITCH_CASE_BEGINNING_TOKEN  shift, and go to state 11
+    FOR_LOOP_STATMENT_TOKEN      shift, and go to state 12
+    WHILE_LOOP_STATEMENT_TOKEN   shift, and go to state 13
+    DO_STATEMENT_TOKEN           shift, and go to state 14
+    IDENTIFIER_TOKEN             shift, and go to state 15
+    '('                          shift, and go to state 16
+    '-'                          shift, and go to state 17
+
+    line                         go to state 18
+    declaration                  go to state 19
+    data_type                    go to state 20
+    assignment                   go to state 21
+    if_statement                 go to state 22
+    switch_statement             go to state 23
+    for_statement                go to state 24
+    while_statement              go to state 25
+    repeat_statement             go to state 26
+    double_value_expAddSubtract  go to state 27
+    double_value_component       go to state 28
+    double_value_factor          go to state 29
+    double_value_term            go to state 30
+
+
+state 1
+
+    2 line: exit_command . STATEMENT_TERMINATOR_TOKEN
+
+    STATEMENT_TERMINATOR_TOKEN  shift, and go to state 31
+
+
+state 2
+
+   24 data_type: Rakam .
+
+    $default  reduce using rule 24 (data_type)
+
+
+state 3
+
+   28 data_type: TOKEN_Hroof .
+
+    $default  reduce using rule 28 (data_type)
+
+
+state 4
+
+   25 data_type: TOKEN_3ashry .
+
+    $default  reduce using rule 25 (data_type)
+
+
+state 5
+
+   27 data_type: TOKEN_Harf .
+
+    $default  reduce using rule 27 (data_type)
+
+
+state 6
+
+   26 data_type: TOKEN_Boolean .
+
+    $default  reduce using rule 26 (data_type)
+
+
+state 7
+
+   23 declaration: CONSTANT_TOKEN . data_type assignment
+
+    Rakam          shift, and go to state 2
+    TOKEN_Hroof    shift, and go to state 3
+    TOKEN_3ashry   shift, and go to state 4
+    TOKEN_Harf     shift, and go to state 5
+    TOKEN_Boolean  shift, and go to state 6
+
+    data_type  go to state 32
+
+
+state 8
+
+   74 double_value_term: DOUBE_FLOATING_POINT .
+
+    $default  reduce using rule 74 (double_value_term)
+
+
+state 9
+
+   17 line: STATEMENT_TERMINATOR_TOKEN .
+
+    $default  reduce using rule 17 (line)
+
+
+state 10
+
+   34 if_statement: IF_STATEMENT_TOKEN . '(' Bexp ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    '('  shift, and go to state 33
+
+
+state 11
+
+   36 switch_statement: SWITCH_CASE_BEGINNING_TOKEN . '(' IDENTIFIER_TOKEN ')' SWITCH_CASE_START_CASES_TOKEN ':' case_statement SWITCH_DEFAULT_CASE_BEGINNING_TOKEN line SWITCH_CASE_END_CASES_TOKEN
+
+    '('  shift, and go to state 34
+
+
+state 12
+
+   41 for_statement: FOR_LOOP_STATMENT_TOKEN . '(' for_iterator STATEMENT_TERMINATOR_TOKEN Bexp1 STATEMENT_TERMINATOR_TOKEN assignment ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    '('  shift, and go to state 35
+
+
+state 13
+
+   42 while_statement: WHILE_LOOP_STATEMENT_TOKEN . '(' Bexp1 ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    '('  shift, and go to state 36
+
+
+state 14
+
+   43 repeat_statement: DO_STATEMENT_TOKEN . line WHILE_LOOP_STATEMENT_TOKEN '(' Bexp1 ')' STATEMENT_TERMINATOR_TOKEN
+
+    exit_command                 shift, and go to state 1
+    Rakam                        shift, and go to state 2
+    TOKEN_Hroof                  shift, and go to state 3
+    TOKEN_3ashry                 shift, and go to state 4
+    TOKEN_Harf                   shift, and go to state 5
+    TOKEN_Boolean                shift, and go to state 6
+    CONSTANT_TOKEN               shift, and go to state 7
+    DOUBE_FLOATING_POINT         shift, and go to state 8
+    STATEMENT_TERMINATOR_TOKEN   shift, and go to state 9
+    IF_STATEMENT_TOKEN           shift, and go to state 10
+    SWITCH_CASE_BEGINNING_TOKEN  shift, and go to state 11
+    FOR_LOOP_STATMENT_TOKEN      shift, and go to state 12
+    WHILE_LOOP_STATEMENT_TOKEN   shift, and go to state 13
+    DO_STATEMENT_TOKEN           shift, and go to state 14
+    IDENTIFIER_TOKEN             shift, and go to state 15
+    '('                          shift, and go to state 16
+    '-'                          shift, and go to state 17
+
+    line                         go to state 37
+    declaration                  go to state 19
+    data_type                    go to state 20
+    assignment                   go to state 21
+    if_statement                 go to state 22
+    switch_statement             go to state 23
+    for_statement                go to state 24
+    while_statement              go to state 25
+    repeat_statement             go to state 26
+    double_value_expAddSubtract  go to state 27
+    double_value_component       go to state 28
+    double_value_factor          go to state 29
+    double_value_term            go to state 30
+
+
+state 15
+
+   29 assignment: IDENTIFIER_TOKEN . '=' expbitwise
+   30           | IDENTIFIER_TOKEN . '=' double_value_expAddSubtract
+   31           | IDENTIFIER_TOKEN . '=' Bexp1
+   32           | IDENTIFIER_TOKEN . '=' string_value_assignment
+
+    '='  shift, and go to state 38
+
+
+state 16
+
+   67 double_value_factor: '(' . double_value_expAddSubtract ')'
+
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    '('                   shift, and go to state 16
+    '-'                   shift, and go to state 17
+
+    double_value_expAddSubtract  go to state 39
+    double_value_component       go to state 28
+    double_value_factor          go to state 29
+    double_value_term            go to state 30
+
+
+state 17
+
+   69 double_value_factor: '-' . double_value_factor
+
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    '('                   shift, and go to state 16
+    '-'                   shift, and go to state 17
+
+    double_value_factor  go to state 40
+    double_value_term    go to state 30
+
+
+state 18
+
+    0 $accept: line . $end
+    4 line: line . declaration STATEMENT_TERMINATOR_TOKEN
+    5     | line . assignment STATEMENT_TERMINATOR_TOKEN
+    6     | line . for_statement
+    8     | line . if_statement
+   10     | line . switch_statement
+   12     | line . while_statement
+   14     | line . repeat_statement
+   16     | line . exit_command STATEMENT_TERMINATOR_TOKEN
+   18     | line . expbitwise STATEMENT_TERMINATOR_TOKEN
+   19     | line . double_value_expAddSubtract STATEMENT_TERMINATOR_TOKEN
+
+    $end                         shift, and go to state 41
+    exit_command                 shift, and go to state 42
+    Rakam                        shift, and go to state 2
+    TOKEN_Hroof                  shift, and go to state 3
+    TOKEN_3ashry                 shift, and go to state 4
+    TOKEN_Harf                   shift, and go to state 5
+    TOKEN_Boolean                shift, and go to state 6
+    CONSTANT_TOKEN               shift, and go to state 7
+    LONG_INTEGER                 shift, and go to state 43
+    DOUBE_FLOATING_POINT         shift, and go to state 8
+    CHARACTER_VALUE              shift, and go to state 44
+    TrueFalse                    shift, and go to state 45
+    IF_STATEMENT_TOKEN           shift, and go to state 10
+    SWITCH_CASE_BEGINNING_TOKEN  shift, and go to state 11
+    FOR_LOOP_STATMENT_TOKEN      shift, and go to state 12
+    WHILE_LOOP_STATEMENT_TOKEN   shift, and go to state 13
+    DO_STATEMENT_TOKEN           shift, and go to state 14
+    IDENTIFIER_TOKEN             shift, and go to state 46
+    '('                          shift, and go to state 47
+    '-'                          shift, and go to state 48
+    '~'                          shift, and go to state 49
+
+    declaration                  go to state 50
+    data_type                    go to state 20
+    assignment                   go to state 51
+    if_statement                 go to state 52
+    switch_statement             go to state 53
+    for_statement                go to state 54
+    while_statement              go to state 55
+    repeat_statement             go to state 56
+    expbitwise                   go to state 57
+    exp                          go to state 58
+    expAddSubtract               go to state 59
+    double_value_expAddSubtract  go to state 60
+    component                    go to state 61
+    double_value_component       go to state 28
+    factor                       go to state 62
+    double_value_factor          go to state 29
+    term                         go to state 63
+    double_value_term            go to state 30
+
+
+state 19
+
+    3 line: declaration . STATEMENT_TERMINATOR_TOKEN
+
+    STATEMENT_TERMINATOR_TOKEN  shift, and go to state 64
+
+
+state 20
+
+   21 declaration: data_type . IDENTIFIER_TOKEN
+   22            | data_type . assignment
+
+    IDENTIFIER_TOKEN  shift, and go to state 65
+
+    assignment  go to state 66
+
+
+state 21
+
+    1 line: assignment . STATEMENT_TERMINATOR_TOKEN
+
+    STATEMENT_TERMINATOR_TOKEN  shift, and go to state 67
+
+
+state 22
+
+    9 line: if_statement .
+   35 if_statement: if_statement . ELSE_STATEMENT_TOKEN SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    ELSE_STATEMENT_TOKEN  shift, and go to state 68
+
+    $default  reduce using rule 9 (line)
+
+
+state 23
+
+   11 line: switch_statement .
+
+    $default  reduce using rule 11 (line)
+
+
+state 24
+
+    7 line: for_statement .
+
+    $default  reduce using rule 7 (line)
+
+
+state 25
+
+   13 line: while_statement .
+
+    $default  reduce using rule 13 (line)
+
+
+state 26
+
+   15 line: repeat_statement .
+
+    $default  reduce using rule 15 (line)
+
+
+state 27
+
+   20 line: double_value_expAddSubtract . STATEMENT_TERMINATOR_TOKEN
+   54 double_value_expAddSubtract: double_value_expAddSubtract . '+' double_value_component
+   55                            | double_value_expAddSubtract . '-' double_value_component
+
+    STATEMENT_TERMINATOR_TOKEN  shift, and go to state 69
+    '+'                         shift, and go to state 70
+    '-'                         shift, and go to state 71
+
+
+state 28
+
+   56 double_value_expAddSubtract: double_value_component .
+   60 double_value_component: double_value_component . '*' double_value_factor
+   61                       | double_value_component . '/' double_value_factor
+
+    '*'  shift, and go to state 72
+    '/'  shift, and go to state 73
+
+    $default  reduce using rule 56 (double_value_expAddSubtract)
+
+
+state 29
+
+   62 double_value_component: double_value_factor .
+
+    $default  reduce using rule 62 (double_value_component)
+
+
+state 30
+
+   68 double_value_factor: double_value_term .
+
+    $default  reduce using rule 68 (double_value_factor)
+
+
+state 31
+
+    2 line: exit_command STATEMENT_TERMINATOR_TOKEN .
+
+    $default  reduce using rule 2 (line)
+
+
+state 32
+
+   23 declaration: CONSTANT_TOKEN data_type . assignment
+
+    IDENTIFIER_TOKEN  shift, and go to state 15
+
+    assignment  go to state 74
+
+
+state 33
+
+   34 if_statement: IF_STATEMENT_TOKEN '(' . Bexp ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    LONG_INTEGER          shift, and go to state 43
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    CHARACTER_VALUE       shift, and go to state 44
+    TrueFalse             shift, and go to state 45
+    IDENTIFIER_TOKEN      shift, and go to state 75
+    '('                   shift, and go to state 47
+    '-'                   shift, and go to state 48
+    '~'                   shift, and go to state 49
+
+    exp                          go to state 76
+    expAddSubtract               go to state 59
+    double_value_expAddSubtract  go to state 77
+    component                    go to state 61
+    double_value_component       go to state 28
+    factor                       go to state 62
+    double_value_factor          go to state 29
+    term                         go to state 63
+    double_value_term            go to state 30
+    Bexp                         go to state 78
+
+
+state 34
+
+   36 switch_statement: SWITCH_CASE_BEGINNING_TOKEN '(' . IDENTIFIER_TOKEN ')' SWITCH_CASE_START_CASES_TOKEN ':' case_statement SWITCH_DEFAULT_CASE_BEGINNING_TOKEN line SWITCH_CASE_END_CASES_TOKEN
+
+    IDENTIFIER_TOKEN  shift, and go to state 79
+
+
+state 35
+
+   41 for_statement: FOR_LOOP_STATMENT_TOKEN '(' . for_iterator STATEMENT_TERMINATOR_TOKEN Bexp1 STATEMENT_TERMINATOR_TOKEN assignment ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    Rakam             shift, and go to state 2
+    TOKEN_Hroof       shift, and go to state 3
+    TOKEN_3ashry      shift, and go to state 4
+    TOKEN_Harf        shift, and go to state 5
+    TOKEN_Boolean     shift, and go to state 6
+    CONSTANT_TOKEN    shift, and go to state 7
+    IDENTIFIER_TOKEN  shift, and go to state 15
+
+    declaration   go to state 80
+    data_type     go to state 20
+    assignment    go to state 81
+    for_iterator  go to state 82
+
+
+state 36
+
+   42 while_statement: WHILE_LOOP_STATEMENT_TOKEN '(' . Bexp1 ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    LONG_INTEGER          shift, and go to state 43
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    CHARACTER_VALUE       shift, and go to state 44
+    TrueFalse             shift, and go to state 45
+    IDENTIFIER_TOKEN      shift, and go to state 75
+    NOT                   shift, and go to state 83
+    '('                   shift, and go to state 84
+    '-'                   shift, and go to state 48
+    '~'                   shift, and go to state 49
+
+    exp                          go to state 76
+    expAddSubtract               go to state 59
+    double_value_expAddSubtract  go to state 77
+    component                    go to state 61
+    double_value_component       go to state 28
+    factor                       go to state 62
+    double_value_factor          go to state 29
+    term                         go to state 63
+    double_value_term            go to state 30
+    Bexp                         go to state 85
+    Bexp1                        go to state 86
+    Bexpand                      go to state 87
+    Bexpbracket                  go to state 88
+
+
+state 37
+
+    4 line: line . declaration STATEMENT_TERMINATOR_TOKEN
+    5     | line . assignment STATEMENT_TERMINATOR_TOKEN
+    6     | line . for_statement
+    8     | line . if_statement
+   10     | line . switch_statement
+   12     | line . while_statement
+   14     | line . repeat_statement
+   16     | line . exit_command STATEMENT_TERMINATOR_TOKEN
+   18     | line . expbitwise STATEMENT_TERMINATOR_TOKEN
+   19     | line . double_value_expAddSubtract STATEMENT_TERMINATOR_TOKEN
+   43 repeat_statement: DO_STATEMENT_TOKEN line . WHILE_LOOP_STATEMENT_TOKEN '(' Bexp1 ')' STATEMENT_TERMINATOR_TOKEN
+
+    exit_command                 shift, and go to state 42
+    Rakam                        shift, and go to state 2
+    TOKEN_Hroof                  shift, and go to state 3
+    TOKEN_3ashry                 shift, and go to state 4
+    TOKEN_Harf                   shift, and go to state 5
+    TOKEN_Boolean                shift, and go to state 6
+    CONSTANT_TOKEN               shift, and go to state 7
+    LONG_INTEGER                 shift, and go to state 43
+    DOUBE_FLOATING_POINT         shift, and go to state 8
+    CHARACTER_VALUE              shift, and go to state 44
+    TrueFalse                    shift, and go to state 45
+    IF_STATEMENT_TOKEN           shift, and go to state 10
+    SWITCH_CASE_BEGINNING_TOKEN  shift, and go to state 11
+    FOR_LOOP_STATMENT_TOKEN      shift, and go to state 12
+    WHILE_LOOP_STATEMENT_TOKEN   shift, and go to state 89
+    DO_STATEMENT_TOKEN           shift, and go to state 14
+    IDENTIFIER_TOKEN             shift, and go to state 46
+    '('                          shift, and go to state 47
+    '-'                          shift, and go to state 48
+    '~'                          shift, and go to state 49
+
+    declaration                  go to state 50
+    data_type                    go to state 20
+    assignment                   go to state 51
+    if_statement                 go to state 52
+    switch_statement             go to state 53
+    for_statement                go to state 54
+    while_statement              go to state 55
+    repeat_statement             go to state 56
+    expbitwise                   go to state 57
+    exp                          go to state 58
+    expAddSubtract               go to state 59
+    double_value_expAddSubtract  go to state 60
+    component                    go to state 61
+    double_value_component       go to state 28
+    factor                       go to state 62
+    double_value_factor          go to state 29
+    term                         go to state 63
+    double_value_term            go to state 30
+
+
+state 38
+
+   29 assignment: IDENTIFIER_TOKEN '=' . expbitwise
+   30           | IDENTIFIER_TOKEN '=' . double_value_expAddSubtract
+   31           | IDENTIFIER_TOKEN '=' . Bexp1
+   32           | IDENTIFIER_TOKEN '=' . string_value_assignment
+
+    LONG_INTEGER          shift, and go to state 43
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    STRING_VALUE          shift, and go to state 90
+    CHARACTER_VALUE       shift, and go to state 44
+    TrueFalse             shift, and go to state 45
+    IDENTIFIER_TOKEN      shift, and go to state 75
+    NOT                   shift, and go to state 83
+    '('                   shift, and go to state 84
+    '-'                   shift, and go to state 48
+    '~'                   shift, and go to state 49
+
+    string_value_assignment      go to state 91
+    expbitwise                   go to state 92
+    exp                          go to state 93
+    expAddSubtract               go to state 59
+    double_value_expAddSubtract  go to state 94
+    component                    go to state 61
+    double_value_component       go to state 28
+    factor                       go to state 62
+    double_value_factor          go to state 29
+    term                         go to state 63
+    double_value_term            go to state 30
+    Bexp                         go to state 85
+    Bexp1                        go to state 95
+    Bexpand                      go to state 87
+    Bexpbracket                  go to state 88
+
+
+state 39
+
+   54 double_value_expAddSubtract: double_value_expAddSubtract . '+' double_value_component
+   55                            | double_value_expAddSubtract . '-' double_value_component
+   67 double_value_factor: '(' double_value_expAddSubtract . ')'
+
+    ')'  shift, and go to state 96
+    '+'  shift, and go to state 70
+    '-'  shift, and go to state 71
+
+
+state 40
+
+   69 double_value_factor: '-' double_value_factor .
+
+    $default  reduce using rule 69 (double_value_factor)
+
+
+state 41
+
+    0 $accept: line $end .
+
+    $default  accept
+
+
+state 42
+
+   16 line: line exit_command . STATEMENT_TERMINATOR_TOKEN
+
+    STATEMENT_TERMINATOR_TOKEN  shift, and go to state 97
+
+
+state 43
+
+   70 term: LONG_INTEGER .
+
+    $default  reduce using rule 70 (term)
+
+
+state 44
+
+   71 term: CHARACTER_VALUE .
+
+    $default  reduce using rule 71 (term)
+
+
+state 45
+
+   72 term: TrueFalse .
+
+    $default  reduce using rule 72 (term)
+
+
+state 46
+
+   29 assignment: IDENTIFIER_TOKEN . '=' expbitwise
+   30           | IDENTIFIER_TOKEN . '=' double_value_expAddSubtract
+   31           | IDENTIFIER_TOKEN . '=' Bexp1
+   32           | IDENTIFIER_TOKEN . '=' string_value_assignment
+   73 term: IDENTIFIER_TOKEN .
+
+    '='  shift, and go to state 38
+
+    $default  reduce using rule 73 (term)
+
+
+state 47
+
+   63 factor: '(' . expbitwise ')'
+   67 double_value_factor: '(' . double_value_expAddSubtract ')'
+
+    LONG_INTEGER          shift, and go to state 43
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    CHARACTER_VALUE       shift, and go to state 44
+    TrueFalse             shift, and go to state 45
+    IDENTIFIER_TOKEN      shift, and go to state 75
+    '('                   shift, and go to state 47
+    '-'                   shift, and go to state 48
+    '~'                   shift, and go to state 49
+
+    expbitwise                   go to state 98
+    exp                          go to state 58
+    expAddSubtract               go to state 59
+    double_value_expAddSubtract  go to state 39
+    component                    go to state 61
+    double_value_component       go to state 28
+    factor                       go to state 62
+    double_value_factor          go to state 29
+    term                         go to state 63
+    double_value_term            go to state 30
+
+
+state 48
+
+   64 factor: '-' . factor
+   69 double_value_factor: '-' . double_value_factor
+
+    LONG_INTEGER          shift, and go to state 43
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    CHARACTER_VALUE       shift, and go to state 44
+    TrueFalse             shift, and go to state 45
+    IDENTIFIER_TOKEN      shift, and go to state 75
+    '('                   shift, and go to state 47
+    '-'                   shift, and go to state 48
+    '~'                   shift, and go to state 49
+
+    factor               go to state 99
+    double_value_factor  go to state 40
+    term                 go to state 63
+    double_value_term    go to state 30
+
+
+state 49
+
+   65 factor: '~' . factor
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+    '('               shift, and go to state 100
+    '-'               shift, and go to state 101
+    '~'               shift, and go to state 49
+
+    factor  go to state 102
+    term    go to state 63
+
+
+state 50
+
+    4 line: line declaration . STATEMENT_TERMINATOR_TOKEN
+
+    STATEMENT_TERMINATOR_TOKEN  shift, and go to state 103
+
+
+state 51
+
+    5 line: line assignment . STATEMENT_TERMINATOR_TOKEN
+
+    STATEMENT_TERMINATOR_TOKEN  shift, and go to state 104
+
+
+state 52
+
+    8 line: line if_statement .
+   35 if_statement: if_statement . ELSE_STATEMENT_TOKEN SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    ELSE_STATEMENT_TOKEN  shift, and go to state 68
+
+    $default  reduce using rule 8 (line)
+
+
+state 53
+
+   10 line: line switch_statement .
+
+    $default  reduce using rule 10 (line)
+
+
+state 54
+
+    6 line: line for_statement .
+
+    $default  reduce using rule 6 (line)
+
+
+state 55
+
+   12 line: line while_statement .
+
+    $default  reduce using rule 12 (line)
+
+
+state 56
+
+   14 line: line repeat_statement .
+
+    $default  reduce using rule 14 (line)
+
+
+state 57
+
+   18 line: line expbitwise . STATEMENT_TERMINATOR_TOKEN
+   44 expbitwise: expbitwise . '|' exp
+   45           | expbitwise . '&' exp
+   46           | expbitwise . '^' exp
+
+    STATEMENT_TERMINATOR_TOKEN  shift, and go to state 105
+    '|'                         shift, and go to state 106
+    '&'                         shift, and go to state 107
+    '^'                         shift, and go to state 108
+
+
+state 58
+
+   47 expbitwise: exp .
+   49 exp: exp . SHIFT_LEFT expAddSubtract
+   50    | exp . SHIFT_RIGHT expAddSubtract
+
+    SHIFT_LEFT   shift, and go to state 109
+    SHIFT_RIGHT  shift, and go to state 110
+
+    $default  reduce using rule 47 (expbitwise)
+
+
+state 59
+
+   48 exp: expAddSubtract .
+   52 expAddSubtract: expAddSubtract . '+' component
+   53               | expAddSubtract . '-' component
+
+    '+'  shift, and go to state 111
+    '-'  shift, and go to state 112
+
+    $default  reduce using rule 48 (exp)
+
+
+state 60
+
+   19 line: line double_value_expAddSubtract . STATEMENT_TERMINATOR_TOKEN
+   54 double_value_expAddSubtract: double_value_expAddSubtract . '+' double_value_component
+   55                            | double_value_expAddSubtract . '-' double_value_component
+
+    STATEMENT_TERMINATOR_TOKEN  shift, and go to state 113
+    '+'                         shift, and go to state 70
+    '-'                         shift, and go to state 71
+
+
+state 61
+
+   51 expAddSubtract: component .
+   57 component: component . '*' factor
+   58          | component . '/' factor
+
+    '*'  shift, and go to state 114
+    '/'  shift, and go to state 115
+
+    $default  reduce using rule 51 (expAddSubtract)
+
+
+state 62
+
+   59 component: factor .
+
+    $default  reduce using rule 59 (component)
+
+
+state 63
+
+   66 factor: term .
+
+    $default  reduce using rule 66 (factor)
+
+
+state 64
+
+    3 line: declaration STATEMENT_TERMINATOR_TOKEN .
+
+    $default  reduce using rule 3 (line)
+
+
+state 65
+
+   21 declaration: data_type IDENTIFIER_TOKEN .
+   29 assignment: IDENTIFIER_TOKEN . '=' expbitwise
+   30           | IDENTIFIER_TOKEN . '=' double_value_expAddSubtract
+   31           | IDENTIFIER_TOKEN . '=' Bexp1
+   32           | IDENTIFIER_TOKEN . '=' string_value_assignment
+
+    '='  shift, and go to state 38
+
+    $default  reduce using rule 21 (declaration)
+
+
+state 66
+
+   22 declaration: data_type assignment .
+
+    $default  reduce using rule 22 (declaration)
+
+
+state 67
+
+    1 line: assignment STATEMENT_TERMINATOR_TOKEN .
+
+    $default  reduce using rule 1 (line)
+
+
+state 68
+
+   35 if_statement: if_statement ELSE_STATEMENT_TOKEN . SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    SCOPE_START_TOKEN  shift, and go to state 116
+
+
+state 69
+
+   20 line: double_value_expAddSubtract STATEMENT_TERMINATOR_TOKEN .
+
+    $default  reduce using rule 20 (line)
+
+
+state 70
+
+   54 double_value_expAddSubtract: double_value_expAddSubtract '+' . double_value_component
+
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    '('                   shift, and go to state 16
+    '-'                   shift, and go to state 17
+
+    double_value_component  go to state 117
+    double_value_factor     go to state 29
+    double_value_term       go to state 30
+
+
+state 71
+
+   55 double_value_expAddSubtract: double_value_expAddSubtract '-' . double_value_component
+
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    '('                   shift, and go to state 16
+    '-'                   shift, and go to state 17
+
+    double_value_component  go to state 118
+    double_value_factor     go to state 29
+    double_value_term       go to state 30
+
+
+state 72
+
+   60 double_value_component: double_value_component '*' . double_value_factor
+
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    '('                   shift, and go to state 16
+    '-'                   shift, and go to state 17
+
+    double_value_factor  go to state 119
+    double_value_term    go to state 30
+
+
+state 73
+
+   61 double_value_component: double_value_component '/' . double_value_factor
+
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    '('                   shift, and go to state 16
+    '-'                   shift, and go to state 17
+
+    double_value_factor  go to state 120
+    double_value_term    go to state 30
+
+
+state 74
+
+   23 declaration: CONSTANT_TOKEN data_type assignment .
+
+    $default  reduce using rule 23 (declaration)
+
+
+state 75
+
+   73 term: IDENTIFIER_TOKEN .
+
+    $default  reduce using rule 73 (term)
+
+
+state 76
+
+   49 exp: exp . SHIFT_LEFT expAddSubtract
+   50    | exp . SHIFT_RIGHT expAddSubtract
+   75 Bexp: exp . '>' exp
+   76     | exp . GREATER_THAN_EQUAL exp
+   77     | exp . '<' exp
+   78     | exp . LESS_THAN_EQUAL exp
+   79     | exp . EQUAL_EQUAL exp
+   80     | exp . NOT_EQUAL exp
+
+    SHIFT_LEFT          shift, and go to state 109
+    SHIFT_RIGHT         shift, and go to state 110
+    GREATER_THAN_EQUAL  shift, and go to state 121
+    LESS_THAN_EQUAL     shift, and go to state 122
+    EQUAL_EQUAL         shift, and go to state 123
+    NOT_EQUAL           shift, and go to state 124
+    '>'                 shift, and go to state 125
+    '<'                 shift, and go to state 126
+
+
+state 77
+
+   54 double_value_expAddSubtract: double_value_expAddSubtract . '+' double_value_component
+   55                            | double_value_expAddSubtract . '-' double_value_component
+   81 Bexp: double_value_expAddSubtract . '>' double_value_expAddSubtract
+   82     | double_value_expAddSubtract . GREATER_THAN_EQUAL double_value_expAddSubtract
+   83     | double_value_expAddSubtract . '<' double_value_expAddSubtract
+   84     | double_value_expAddSubtract . LESS_THAN_EQUAL double_value_expAddSubtract
+   85     | double_value_expAddSubtract . EQUAL_EQUAL double_value_expAddSubtract
+   86     | double_value_expAddSubtract . NOT_EQUAL double_value_expAddSubtract
+
+    GREATER_THAN_EQUAL  shift, and go to state 127
+    LESS_THAN_EQUAL     shift, and go to state 128
+    EQUAL_EQUAL         shift, and go to state 129
+    NOT_EQUAL           shift, and go to state 130
+    '+'                 shift, and go to state 70
+    '-'                 shift, and go to state 71
+    '>'                 shift, and go to state 131
+    '<'                 shift, and go to state 132
+
+
+state 78
+
+   34 if_statement: IF_STATEMENT_TOKEN '(' Bexp . ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    ')'  shift, and go to state 133
+
+
+state 79
+
+   36 switch_statement: SWITCH_CASE_BEGINNING_TOKEN '(' IDENTIFIER_TOKEN . ')' SWITCH_CASE_START_CASES_TOKEN ':' case_statement SWITCH_DEFAULT_CASE_BEGINNING_TOKEN line SWITCH_CASE_END_CASES_TOKEN
+
+    ')'  shift, and go to state 134
+
+
+state 80
+
+   40 for_iterator: declaration .
+
+    $default  reduce using rule 40 (for_iterator)
+
+
+state 81
+
+   39 for_iterator: assignment .
+
+    $default  reduce using rule 39 (for_iterator)
+
+
+state 82
+
+   41 for_statement: FOR_LOOP_STATMENT_TOKEN '(' for_iterator . STATEMENT_TERMINATOR_TOKEN Bexp1 STATEMENT_TERMINATOR_TOKEN assignment ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    STATEMENT_TERMINATOR_TOKEN  shift, and go to state 135
+
+
+state 83
+
+   92 Bexpbracket: NOT . Bexpbracket
+
+    LONG_INTEGER          shift, and go to state 43
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    CHARACTER_VALUE       shift, and go to state 44
+    TrueFalse             shift, and go to state 45
+    IDENTIFIER_TOKEN      shift, and go to state 75
+    NOT                   shift, and go to state 83
+    '('                   shift, and go to state 84
+    '-'                   shift, and go to state 48
+    '~'                   shift, and go to state 49
+
+    exp                          go to state 76
+    expAddSubtract               go to state 59
+    double_value_expAddSubtract  go to state 77
+    component                    go to state 61
+    double_value_component       go to state 28
+    factor                       go to state 62
+    double_value_factor          go to state 29
+    term                         go to state 63
+    double_value_term            go to state 30
+    Bexp                         go to state 85
+    Bexpbracket                  go to state 136
+
+
+state 84
+
+   63 factor: '(' . expbitwise ')'
+   67 double_value_factor: '(' . double_value_expAddSubtract ')'
+   91 Bexpbracket: '(' . Bexp1 ')'
+
+    LONG_INTEGER          shift, and go to state 43
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    CHARACTER_VALUE       shift, and go to state 44
+    TrueFalse             shift, and go to state 45
+    IDENTIFIER_TOKEN      shift, and go to state 75
+    NOT                   shift, and go to state 83
+    '('                   shift, and go to state 84
+    '-'                   shift, and go to state 48
+    '~'                   shift, and go to state 49
+
+    expbitwise                   go to state 98
+    exp                          go to state 93
+    expAddSubtract               go to state 59
+    double_value_expAddSubtract  go to state 137
+    component                    go to state 61
+    double_value_component       go to state 28
+    factor                       go to state 62
+    double_value_factor          go to state 29
+    term                         go to state 63
+    double_value_term            go to state 30
+    Bexp                         go to state 85
+    Bexp1                        go to state 138
+    Bexpand                      go to state 87
+    Bexpbracket                  go to state 88
+
+
+state 85
+
+   93 Bexpbracket: Bexp .
+
+    $default  reduce using rule 93 (Bexpbracket)
+
+
+state 86
+
+   42 while_statement: WHILE_LOOP_STATEMENT_TOKEN '(' Bexp1 . ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+   87 Bexp1: Bexp1 . OR Bexpand
+
+    OR   shift, and go to state 139
+    ')'  shift, and go to state 140
+
+
+state 87
+
+   88 Bexp1: Bexpand .
+   89 Bexpand: Bexpand . AND Bexpbracket
+
+    AND  shift, and go to state 141
+
+    $default  reduce using rule 88 (Bexp1)
+
+
+state 88
+
+   90 Bexpand: Bexpbracket .
+
+    $default  reduce using rule 90 (Bexpand)
+
+
+state 89
+
+   42 while_statement: WHILE_LOOP_STATEMENT_TOKEN . '(' Bexp1 ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+   43 repeat_statement: DO_STATEMENT_TOKEN line WHILE_LOOP_STATEMENT_TOKEN . '(' Bexp1 ')' STATEMENT_TERMINATOR_TOKEN
+
+    '('  shift, and go to state 142
+
+
+state 90
+
+   33 string_value_assignment: STRING_VALUE .
+
+    $default  reduce using rule 33 (string_value_assignment)
+
+
+state 91
+
+   32 assignment: IDENTIFIER_TOKEN '=' string_value_assignment .
+
+    $default  reduce using rule 32 (assignment)
+
+
+state 92
+
+   29 assignment: IDENTIFIER_TOKEN '=' expbitwise .
+   44 expbitwise: expbitwise . '|' exp
+   45           | expbitwise . '&' exp
+   46           | expbitwise . '^' exp
+
+    '|'  shift, and go to state 106
+    '&'  shift, and go to state 107
+    '^'  shift, and go to state 108
+
+    $default  reduce using rule 29 (assignment)
+
+
+state 93
+
+   47 expbitwise: exp .
+   49 exp: exp . SHIFT_LEFT expAddSubtract
+   50    | exp . SHIFT_RIGHT expAddSubtract
+   75 Bexp: exp . '>' exp
+   76     | exp . GREATER_THAN_EQUAL exp
+   77     | exp . '<' exp
+   78     | exp . LESS_THAN_EQUAL exp
+   79     | exp . EQUAL_EQUAL exp
+   80     | exp . NOT_EQUAL exp
+
+    SHIFT_LEFT          shift, and go to state 109
+    SHIFT_RIGHT         shift, and go to state 110
+    GREATER_THAN_EQUAL  shift, and go to state 121
+    LESS_THAN_EQUAL     shift, and go to state 122
+    EQUAL_EQUAL         shift, and go to state 123
+    NOT_EQUAL           shift, and go to state 124
+    '>'                 shift, and go to state 125
+    '<'                 shift, and go to state 126
+
+    $default  reduce using rule 47 (expbitwise)
+
+
+state 94
+
+   30 assignment: IDENTIFIER_TOKEN '=' double_value_expAddSubtract .
+   54 double_value_expAddSubtract: double_value_expAddSubtract . '+' double_value_component
+   55                            | double_value_expAddSubtract . '-' double_value_component
+   81 Bexp: double_value_expAddSubtract . '>' double_value_expAddSubtract
+   82     | double_value_expAddSubtract . GREATER_THAN_EQUAL double_value_expAddSubtract
+   83     | double_value_expAddSubtract . '<' double_value_expAddSubtract
+   84     | double_value_expAddSubtract . LESS_THAN_EQUAL double_value_expAddSubtract
+   85     | double_value_expAddSubtract . EQUAL_EQUAL double_value_expAddSubtract
+   86     | double_value_expAddSubtract . NOT_EQUAL double_value_expAddSubtract
+
+    GREATER_THAN_EQUAL  shift, and go to state 127
+    LESS_THAN_EQUAL     shift, and go to state 128
+    EQUAL_EQUAL         shift, and go to state 129
+    NOT_EQUAL           shift, and go to state 130
+    '+'                 shift, and go to state 70
+    '-'                 shift, and go to state 71
+    '>'                 shift, and go to state 131
+    '<'                 shift, and go to state 132
+
+    $default  reduce using rule 30 (assignment)
+
+
+state 95
+
+   31 assignment: IDENTIFIER_TOKEN '=' Bexp1 .
+   87 Bexp1: Bexp1 . OR Bexpand
+
+    OR  shift, and go to state 139
+
+    $default  reduce using rule 31 (assignment)
+
+
+state 96
+
+   67 double_value_factor: '(' double_value_expAddSubtract ')' .
+
+    $default  reduce using rule 67 (double_value_factor)
+
+
+state 97
+
+   16 line: line exit_command STATEMENT_TERMINATOR_TOKEN .
+
+    $default  reduce using rule 16 (line)
+
+
+state 98
+
+   44 expbitwise: expbitwise . '|' exp
+   45           | expbitwise . '&' exp
+   46           | expbitwise . '^' exp
+   63 factor: '(' expbitwise . ')'
+
+    ')'  shift, and go to state 143
+    '|'  shift, and go to state 106
+    '&'  shift, and go to state 107
+    '^'  shift, and go to state 108
+
+
+state 99
+
+   64 factor: '-' factor .
+
+    $default  reduce using rule 64 (factor)
+
+
+state 100
+
+   63 factor: '(' . expbitwise ')'
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+    '('               shift, and go to state 100
+    '-'               shift, and go to state 101
+    '~'               shift, and go to state 49
+
+    expbitwise      go to state 98
+    exp             go to state 58
+    expAddSubtract  go to state 59
+    component       go to state 61
+    factor          go to state 62
+    term            go to state 63
+
+
+state 101
+
+   64 factor: '-' . factor
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+    '('               shift, and go to state 100
+    '-'               shift, and go to state 101
+    '~'               shift, and go to state 49
+
+    factor  go to state 99
+    term    go to state 63
+
+
+state 102
+
+   65 factor: '~' factor .
+
+    $default  reduce using rule 65 (factor)
+
+
+state 103
+
+    4 line: line declaration STATEMENT_TERMINATOR_TOKEN .
+
+    $default  reduce using rule 4 (line)
+
+
+state 104
+
+    5 line: line assignment STATEMENT_TERMINATOR_TOKEN .
+
+    $default  reduce using rule 5 (line)
+
+
+state 105
+
+   18 line: line expbitwise STATEMENT_TERMINATOR_TOKEN .
+
+    $default  reduce using rule 18 (line)
+
+
+state 106
+
+   44 expbitwise: expbitwise '|' . exp
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+    '('               shift, and go to state 100
+    '-'               shift, and go to state 101
+    '~'               shift, and go to state 49
+
+    exp             go to state 144
+    expAddSubtract  go to state 59
+    component       go to state 61
+    factor          go to state 62
+    term            go to state 63
+
+
+state 107
+
+   45 expbitwise: expbitwise '&' . exp
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+    '('               shift, and go to state 100
+    '-'               shift, and go to state 101
+    '~'               shift, and go to state 49
+
+    exp             go to state 145
+    expAddSubtract  go to state 59
+    component       go to state 61
+    factor          go to state 62
+    term            go to state 63
+
+
+state 108
+
+   46 expbitwise: expbitwise '^' . exp
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+    '('               shift, and go to state 100
+    '-'               shift, and go to state 101
+    '~'               shift, and go to state 49
+
+    exp             go to state 146
+    expAddSubtract  go to state 59
+    component       go to state 61
+    factor          go to state 62
+    term            go to state 63
+
+
+state 109
+
+   49 exp: exp SHIFT_LEFT . expAddSubtract
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+    '('               shift, and go to state 100
+    '-'               shift, and go to state 101
+    '~'               shift, and go to state 49
+
+    expAddSubtract  go to state 147
+    component       go to state 61
+    factor          go to state 62
+    term            go to state 63
+
+
+state 110
+
+   50 exp: exp SHIFT_RIGHT . expAddSubtract
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+    '('               shift, and go to state 100
+    '-'               shift, and go to state 101
+    '~'               shift, and go to state 49
+
+    expAddSubtract  go to state 148
+    component       go to state 61
+    factor          go to state 62
+    term            go to state 63
+
+
+state 111
+
+   52 expAddSubtract: expAddSubtract '+' . component
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+    '('               shift, and go to state 100
+    '-'               shift, and go to state 101
+    '~'               shift, and go to state 49
+
+    component  go to state 149
+    factor     go to state 62
+    term       go to state 63
+
+
+state 112
+
+   53 expAddSubtract: expAddSubtract '-' . component
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+    '('               shift, and go to state 100
+    '-'               shift, and go to state 101
+    '~'               shift, and go to state 49
+
+    component  go to state 150
+    factor     go to state 62
+    term       go to state 63
+
+
+state 113
+
+   19 line: line double_value_expAddSubtract STATEMENT_TERMINATOR_TOKEN .
+
+    $default  reduce using rule 19 (line)
+
+
+state 114
+
+   57 component: component '*' . factor
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+    '('               shift, and go to state 100
+    '-'               shift, and go to state 101
+    '~'               shift, and go to state 49
+
+    factor  go to state 151
+    term    go to state 63
+
+
+state 115
+
+   58 component: component '/' . factor
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+    '('               shift, and go to state 100
+    '-'               shift, and go to state 101
+    '~'               shift, and go to state 49
+
+    factor  go to state 152
+    term    go to state 63
+
+
+state 116
+
+   35 if_statement: if_statement ELSE_STATEMENT_TOKEN SCOPE_START_TOKEN . line SCOPE_END_TOKEN
+
+    exit_command                 shift, and go to state 1
+    Rakam                        shift, and go to state 2
+    TOKEN_Hroof                  shift, and go to state 3
+    TOKEN_3ashry                 shift, and go to state 4
+    TOKEN_Harf                   shift, and go to state 5
+    TOKEN_Boolean                shift, and go to state 6
+    CONSTANT_TOKEN               shift, and go to state 7
+    DOUBE_FLOATING_POINT         shift, and go to state 8
+    STATEMENT_TERMINATOR_TOKEN   shift, and go to state 9
+    IF_STATEMENT_TOKEN           shift, and go to state 10
+    SWITCH_CASE_BEGINNING_TOKEN  shift, and go to state 11
+    FOR_LOOP_STATMENT_TOKEN      shift, and go to state 12
+    WHILE_LOOP_STATEMENT_TOKEN   shift, and go to state 13
+    DO_STATEMENT_TOKEN           shift, and go to state 14
+    IDENTIFIER_TOKEN             shift, and go to state 15
+    '('                          shift, and go to state 16
+    '-'                          shift, and go to state 17
+
+    line                         go to state 153
+    declaration                  go to state 19
+    data_type                    go to state 20
+    assignment                   go to state 21
+    if_statement                 go to state 22
+    switch_statement             go to state 23
+    for_statement                go to state 24
+    while_statement              go to state 25
+    repeat_statement             go to state 26
+    double_value_expAddSubtract  go to state 27
+    double_value_component       go to state 28
+    double_value_factor          go to state 29
+    double_value_term            go to state 30
+
+
+state 117
+
+   54 double_value_expAddSubtract: double_value_expAddSubtract '+' double_value_component .
+   60 double_value_component: double_value_component . '*' double_value_factor
+   61                       | double_value_component . '/' double_value_factor
+
+    '*'  shift, and go to state 72
+    '/'  shift, and go to state 73
+
+    $default  reduce using rule 54 (double_value_expAddSubtract)
+
+
+state 118
+
+   55 double_value_expAddSubtract: double_value_expAddSubtract '-' double_value_component .
+   60 double_value_component: double_value_component . '*' double_value_factor
+   61                       | double_value_component . '/' double_value_factor
+
+    '*'  shift, and go to state 72
+    '/'  shift, and go to state 73
+
+    $default  reduce using rule 55 (double_value_expAddSubtract)
+
+
+state 119
+
+   60 double_value_component: double_value_component '*' double_value_factor .
+
+    $default  reduce using rule 60 (double_value_component)
+
+
+state 120
+
+   61 double_value_component: double_value_component '/' double_value_factor .
+
+    $default  reduce using rule 61 (double_value_component)
+
+
+state 121
+
+   76 Bexp: exp GREATER_THAN_EQUAL . exp
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+    '('               shift, and go to state 100
+    '-'               shift, and go to state 101
+    '~'               shift, and go to state 49
+
+    exp             go to state 154
+    expAddSubtract  go to state 59
+    component       go to state 61
+    factor          go to state 62
+    term            go to state 63
+
+
+state 122
+
+   78 Bexp: exp LESS_THAN_EQUAL . exp
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+    '('               shift, and go to state 100
+    '-'               shift, and go to state 101
+    '~'               shift, and go to state 49
+
+    exp             go to state 155
+    expAddSubtract  go to state 59
+    component       go to state 61
+    factor          go to state 62
+    term            go to state 63
+
+
+state 123
+
+   79 Bexp: exp EQUAL_EQUAL . exp
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+    '('               shift, and go to state 100
+    '-'               shift, and go to state 101
+    '~'               shift, and go to state 49
+
+    exp             go to state 156
+    expAddSubtract  go to state 59
+    component       go to state 61
+    factor          go to state 62
+    term            go to state 63
+
+
+state 124
+
+   80 Bexp: exp NOT_EQUAL . exp
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+    '('               shift, and go to state 100
+    '-'               shift, and go to state 101
+    '~'               shift, and go to state 49
+
+    exp             go to state 157
+    expAddSubtract  go to state 59
+    component       go to state 61
+    factor          go to state 62
+    term            go to state 63
+
+
+state 125
+
+   75 Bexp: exp '>' . exp
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+    '('               shift, and go to state 100
+    '-'               shift, and go to state 101
+    '~'               shift, and go to state 49
+
+    exp             go to state 158
+    expAddSubtract  go to state 59
+    component       go to state 61
+    factor          go to state 62
+    term            go to state 63
+
+
+state 126
+
+   77 Bexp: exp '<' . exp
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+    '('               shift, and go to state 100
+    '-'               shift, and go to state 101
+    '~'               shift, and go to state 49
+
+    exp             go to state 159
+    expAddSubtract  go to state 59
+    component       go to state 61
+    factor          go to state 62
+    term            go to state 63
+
+
+state 127
+
+   82 Bexp: double_value_expAddSubtract GREATER_THAN_EQUAL . double_value_expAddSubtract
+
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    '('                   shift, and go to state 16
+    '-'                   shift, and go to state 17
+
+    double_value_expAddSubtract  go to state 160
+    double_value_component       go to state 28
+    double_value_factor          go to state 29
+    double_value_term            go to state 30
+
+
+state 128
+
+   84 Bexp: double_value_expAddSubtract LESS_THAN_EQUAL . double_value_expAddSubtract
+
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    '('                   shift, and go to state 16
+    '-'                   shift, and go to state 17
+
+    double_value_expAddSubtract  go to state 161
+    double_value_component       go to state 28
+    double_value_factor          go to state 29
+    double_value_term            go to state 30
+
+
+state 129
+
+   85 Bexp: double_value_expAddSubtract EQUAL_EQUAL . double_value_expAddSubtract
+
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    '('                   shift, and go to state 16
+    '-'                   shift, and go to state 17
+
+    double_value_expAddSubtract  go to state 162
+    double_value_component       go to state 28
+    double_value_factor          go to state 29
+    double_value_term            go to state 30
+
+
+state 130
+
+   86 Bexp: double_value_expAddSubtract NOT_EQUAL . double_value_expAddSubtract
+
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    '('                   shift, and go to state 16
+    '-'                   shift, and go to state 17
+
+    double_value_expAddSubtract  go to state 163
+    double_value_component       go to state 28
+    double_value_factor          go to state 29
+    double_value_term            go to state 30
+
+
+state 131
+
+   81 Bexp: double_value_expAddSubtract '>' . double_value_expAddSubtract
+
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    '('                   shift, and go to state 16
+    '-'                   shift, and go to state 17
+
+    double_value_expAddSubtract  go to state 164
+    double_value_component       go to state 28
+    double_value_factor          go to state 29
+    double_value_term            go to state 30
+
+
+state 132
+
+   83 Bexp: double_value_expAddSubtract '<' . double_value_expAddSubtract
+
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    '('                   shift, and go to state 16
+    '-'                   shift, and go to state 17
+
+    double_value_expAddSubtract  go to state 165
+    double_value_component       go to state 28
+    double_value_factor          go to state 29
+    double_value_term            go to state 30
+
+
+state 133
+
+   34 if_statement: IF_STATEMENT_TOKEN '(' Bexp ')' . SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    SCOPE_START_TOKEN  shift, and go to state 166
+
+
+state 134
+
+   36 switch_statement: SWITCH_CASE_BEGINNING_TOKEN '(' IDENTIFIER_TOKEN ')' . SWITCH_CASE_START_CASES_TOKEN ':' case_statement SWITCH_DEFAULT_CASE_BEGINNING_TOKEN line SWITCH_CASE_END_CASES_TOKEN
+
+    SWITCH_CASE_START_CASES_TOKEN  shift, and go to state 167
+
+
+state 135
+
+   41 for_statement: FOR_LOOP_STATMENT_TOKEN '(' for_iterator STATEMENT_TERMINATOR_TOKEN . Bexp1 STATEMENT_TERMINATOR_TOKEN assignment ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    LONG_INTEGER          shift, and go to state 43
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    CHARACTER_VALUE       shift, and go to state 44
+    TrueFalse             shift, and go to state 45
+    IDENTIFIER_TOKEN      shift, and go to state 75
+    NOT                   shift, and go to state 83
+    '('                   shift, and go to state 84
+    '-'                   shift, and go to state 48
+    '~'                   shift, and go to state 49
+
+    exp                          go to state 76
+    expAddSubtract               go to state 59
+    double_value_expAddSubtract  go to state 77
+    component                    go to state 61
+    double_value_component       go to state 28
+    factor                       go to state 62
+    double_value_factor          go to state 29
+    term                         go to state 63
+    double_value_term            go to state 30
+    Bexp                         go to state 85
+    Bexp1                        go to state 168
+    Bexpand                      go to state 87
+    Bexpbracket                  go to state 88
+
+
+state 136
+
+   92 Bexpbracket: NOT Bexpbracket .
+
+    $default  reduce using rule 92 (Bexpbracket)
+
+
+state 137
+
+   54 double_value_expAddSubtract: double_value_expAddSubtract . '+' double_value_component
+   55                            | double_value_expAddSubtract . '-' double_value_component
+   67 double_value_factor: '(' double_value_expAddSubtract . ')'
+   81 Bexp: double_value_expAddSubtract . '>' double_value_expAddSubtract
+   82     | double_value_expAddSubtract . GREATER_THAN_EQUAL double_value_expAddSubtract
+   83     | double_value_expAddSubtract . '<' double_value_expAddSubtract
+   84     | double_value_expAddSubtract . LESS_THAN_EQUAL double_value_expAddSubtract
+   85     | double_value_expAddSubtract . EQUAL_EQUAL double_value_expAddSubtract
+   86     | double_value_expAddSubtract . NOT_EQUAL double_value_expAddSubtract
+
+    GREATER_THAN_EQUAL  shift, and go to state 127
+    LESS_THAN_EQUAL     shift, and go to state 128
+    EQUAL_EQUAL         shift, and go to state 129
+    NOT_EQUAL           shift, and go to state 130
+    ')'                 shift, and go to state 96
+    '+'                 shift, and go to state 70
+    '-'                 shift, and go to state 71
+    '>'                 shift, and go to state 131
+    '<'                 shift, and go to state 132
+
+
+state 138
+
+   87 Bexp1: Bexp1 . OR Bexpand
+   91 Bexpbracket: '(' Bexp1 . ')'
+
+    OR   shift, and go to state 139
+    ')'  shift, and go to state 169
+
+
+state 139
+
+   87 Bexp1: Bexp1 OR . Bexpand
+
+    LONG_INTEGER          shift, and go to state 43
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    CHARACTER_VALUE       shift, and go to state 44
+    TrueFalse             shift, and go to state 45
+    IDENTIFIER_TOKEN      shift, and go to state 75
+    NOT                   shift, and go to state 83
+    '('                   shift, and go to state 84
+    '-'                   shift, and go to state 48
+    '~'                   shift, and go to state 49
+
+    exp                          go to state 76
+    expAddSubtract               go to state 59
+    double_value_expAddSubtract  go to state 77
+    component                    go to state 61
+    double_value_component       go to state 28
+    factor                       go to state 62
+    double_value_factor          go to state 29
+    term                         go to state 63
+    double_value_term            go to state 30
+    Bexp                         go to state 85
+    Bexpand                      go to state 170
+    Bexpbracket                  go to state 88
+
+
+state 140
+
+   42 while_statement: WHILE_LOOP_STATEMENT_TOKEN '(' Bexp1 ')' . SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    SCOPE_START_TOKEN  shift, and go to state 171
+
+
+state 141
+
+   89 Bexpand: Bexpand AND . Bexpbracket
+
+    LONG_INTEGER          shift, and go to state 43
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    CHARACTER_VALUE       shift, and go to state 44
+    TrueFalse             shift, and go to state 45
+    IDENTIFIER_TOKEN      shift, and go to state 75
+    NOT                   shift, and go to state 83
+    '('                   shift, and go to state 84
+    '-'                   shift, and go to state 48
+    '~'                   shift, and go to state 49
+
+    exp                          go to state 76
+    expAddSubtract               go to state 59
+    double_value_expAddSubtract  go to state 77
+    component                    go to state 61
+    double_value_component       go to state 28
+    factor                       go to state 62
+    double_value_factor          go to state 29
+    term                         go to state 63
+    double_value_term            go to state 30
+    Bexp                         go to state 85
+    Bexpbracket                  go to state 172
+
+
+state 142
+
+   42 while_statement: WHILE_LOOP_STATEMENT_TOKEN '(' . Bexp1 ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+   43 repeat_statement: DO_STATEMENT_TOKEN line WHILE_LOOP_STATEMENT_TOKEN '(' . Bexp1 ')' STATEMENT_TERMINATOR_TOKEN
+
+    LONG_INTEGER          shift, and go to state 43
+    DOUBE_FLOATING_POINT  shift, and go to state 8
+    CHARACTER_VALUE       shift, and go to state 44
+    TrueFalse             shift, and go to state 45
+    IDENTIFIER_TOKEN      shift, and go to state 75
+    NOT                   shift, and go to state 83
+    '('                   shift, and go to state 84
+    '-'                   shift, and go to state 48
+    '~'                   shift, and go to state 49
+
+    exp                          go to state 76
+    expAddSubtract               go to state 59
+    double_value_expAddSubtract  go to state 77
+    component                    go to state 61
+    double_value_component       go to state 28
+    factor                       go to state 62
+    double_value_factor          go to state 29
+    term                         go to state 63
+    double_value_term            go to state 30
+    Bexp                         go to state 85
+    Bexp1                        go to state 173
+    Bexpand                      go to state 87
+    Bexpbracket                  go to state 88
+
+
+state 143
+
+   63 factor: '(' expbitwise ')' .
+
+    $default  reduce using rule 63 (factor)
+
+
+state 144
+
+   44 expbitwise: expbitwise '|' exp .
+   49 exp: exp . SHIFT_LEFT expAddSubtract
+   50    | exp . SHIFT_RIGHT expAddSubtract
+
+    SHIFT_LEFT   shift, and go to state 109
+    SHIFT_RIGHT  shift, and go to state 110
+
+    $default  reduce using rule 44 (expbitwise)
+
+
+state 145
+
+   45 expbitwise: expbitwise '&' exp .
+   49 exp: exp . SHIFT_LEFT expAddSubtract
+   50    | exp . SHIFT_RIGHT expAddSubtract
+
+    SHIFT_LEFT   shift, and go to state 109
+    SHIFT_RIGHT  shift, and go to state 110
+
+    $default  reduce using rule 45 (expbitwise)
+
+
+state 146
+
+   46 expbitwise: expbitwise '^' exp .
+   49 exp: exp . SHIFT_LEFT expAddSubtract
+   50    | exp . SHIFT_RIGHT expAddSubtract
+
+    SHIFT_LEFT   shift, and go to state 109
+    SHIFT_RIGHT  shift, and go to state 110
+
+    $default  reduce using rule 46 (expbitwise)
+
+
+state 147
+
+   49 exp: exp SHIFT_LEFT expAddSubtract .
+   52 expAddSubtract: expAddSubtract . '+' component
+   53               | expAddSubtract . '-' component
+
+    '+'  shift, and go to state 111
+    '-'  shift, and go to state 112
+
+    $default  reduce using rule 49 (exp)
+
+
+state 148
+
+   50 exp: exp SHIFT_RIGHT expAddSubtract .
+   52 expAddSubtract: expAddSubtract . '+' component
+   53               | expAddSubtract . '-' component
+
+    '+'  shift, and go to state 111
+    '-'  shift, and go to state 112
+
+    $default  reduce using rule 50 (exp)
+
+
+state 149
+
+   52 expAddSubtract: expAddSubtract '+' component .
+   57 component: component . '*' factor
+   58          | component . '/' factor
+
+    '*'  shift, and go to state 114
+    '/'  shift, and go to state 115
+
+    $default  reduce using rule 52 (expAddSubtract)
+
+
+state 150
+
+   53 expAddSubtract: expAddSubtract '-' component .
+   57 component: component . '*' factor
+   58          | component . '/' factor
+
+    '*'  shift, and go to state 114
+    '/'  shift, and go to state 115
+
+    $default  reduce using rule 53 (expAddSubtract)
+
+
+state 151
+
+   57 component: component '*' factor .
+
+    $default  reduce using rule 57 (component)
+
+
+state 152
+
+   58 component: component '/' factor .
+
+    $default  reduce using rule 58 (component)
+
+
+state 153
+
+    4 line: line . declaration STATEMENT_TERMINATOR_TOKEN
+    5     | line . assignment STATEMENT_TERMINATOR_TOKEN
+    6     | line . for_statement
+    8     | line . if_statement
+   10     | line . switch_statement
+   12     | line . while_statement
+   14     | line . repeat_statement
+   16     | line . exit_command STATEMENT_TERMINATOR_TOKEN
+   18     | line . expbitwise STATEMENT_TERMINATOR_TOKEN
+   19     | line . double_value_expAddSubtract STATEMENT_TERMINATOR_TOKEN
+   35 if_statement: if_statement ELSE_STATEMENT_TOKEN SCOPE_START_TOKEN line . SCOPE_END_TOKEN
+
+    exit_command                 shift, and go to state 42
+    Rakam                        shift, and go to state 2
+    TOKEN_Hroof                  shift, and go to state 3
+    TOKEN_3ashry                 shift, and go to state 4
+    TOKEN_Harf                   shift, and go to state 5
+    TOKEN_Boolean                shift, and go to state 6
+    CONSTANT_TOKEN               shift, and go to state 7
+    LONG_INTEGER                 shift, and go to state 43
+    DOUBE_FLOATING_POINT         shift, and go to state 8
+    CHARACTER_VALUE              shift, and go to state 44
+    TrueFalse                    shift, and go to state 45
+    SCOPE_END_TOKEN              shift, and go to state 174
+    IF_STATEMENT_TOKEN           shift, and go to state 10
+    SWITCH_CASE_BEGINNING_TOKEN  shift, and go to state 11
+    FOR_LOOP_STATMENT_TOKEN      shift, and go to state 12
+    WHILE_LOOP_STATEMENT_TOKEN   shift, and go to state 13
+    DO_STATEMENT_TOKEN           shift, and go to state 14
+    IDENTIFIER_TOKEN             shift, and go to state 46
+    '('                          shift, and go to state 47
+    '-'                          shift, and go to state 48
+    '~'                          shift, and go to state 49
+
+    declaration                  go to state 50
+    data_type                    go to state 20
+    assignment                   go to state 51
+    if_statement                 go to state 52
+    switch_statement             go to state 53
+    for_statement                go to state 54
+    while_statement              go to state 55
+    repeat_statement             go to state 56
+    expbitwise                   go to state 57
+    exp                          go to state 58
+    expAddSubtract               go to state 59
+    double_value_expAddSubtract  go to state 60
+    component                    go to state 61
+    double_value_component       go to state 28
+    factor                       go to state 62
+    double_value_factor          go to state 29
+    term                         go to state 63
+    double_value_term            go to state 30
+
+
+state 154
+
+   49 exp: exp . SHIFT_LEFT expAddSubtract
+   50    | exp . SHIFT_RIGHT expAddSubtract
+   76 Bexp: exp GREATER_THAN_EQUAL exp .
+
+    SHIFT_LEFT   shift, and go to state 109
+    SHIFT_RIGHT  shift, and go to state 110
+
+    $default  reduce using rule 76 (Bexp)
+
+
+state 155
+
+   49 exp: exp . SHIFT_LEFT expAddSubtract
+   50    | exp . SHIFT_RIGHT expAddSubtract
+   78 Bexp: exp LESS_THAN_EQUAL exp .
+
+    SHIFT_LEFT   shift, and go to state 109
+    SHIFT_RIGHT  shift, and go to state 110
+
+    $default  reduce using rule 78 (Bexp)
+
+
+state 156
+
+   49 exp: exp . SHIFT_LEFT expAddSubtract
+   50    | exp . SHIFT_RIGHT expAddSubtract
+   79 Bexp: exp EQUAL_EQUAL exp .
+
+    SHIFT_LEFT   shift, and go to state 109
+    SHIFT_RIGHT  shift, and go to state 110
+
+    $default  reduce using rule 79 (Bexp)
+
+
+state 157
+
+   49 exp: exp . SHIFT_LEFT expAddSubtract
+   50    | exp . SHIFT_RIGHT expAddSubtract
+   80 Bexp: exp NOT_EQUAL exp .
+
+    SHIFT_LEFT   shift, and go to state 109
+    SHIFT_RIGHT  shift, and go to state 110
+
+    $default  reduce using rule 80 (Bexp)
+
+
+state 158
+
+   49 exp: exp . SHIFT_LEFT expAddSubtract
+   50    | exp . SHIFT_RIGHT expAddSubtract
+   75 Bexp: exp '>' exp .
+
+    SHIFT_LEFT   shift, and go to state 109
+    SHIFT_RIGHT  shift, and go to state 110
+
+    $default  reduce using rule 75 (Bexp)
+
+
+state 159
+
+   49 exp: exp . SHIFT_LEFT expAddSubtract
+   50    | exp . SHIFT_RIGHT expAddSubtract
+   77 Bexp: exp '<' exp .
+
+    SHIFT_LEFT   shift, and go to state 109
+    SHIFT_RIGHT  shift, and go to state 110
+
+    $default  reduce using rule 77 (Bexp)
+
+
+state 160
+
+   54 double_value_expAddSubtract: double_value_expAddSubtract . '+' double_value_component
+   55                            | double_value_expAddSubtract . '-' double_value_component
+   82 Bexp: double_value_expAddSubtract GREATER_THAN_EQUAL double_value_expAddSubtract .
+
+    '+'  shift, and go to state 70
+    '-'  shift, and go to state 71
+
+    $default  reduce using rule 82 (Bexp)
+
+
+state 161
+
+   54 double_value_expAddSubtract: double_value_expAddSubtract . '+' double_value_component
+   55                            | double_value_expAddSubtract . '-' double_value_component
+   84 Bexp: double_value_expAddSubtract LESS_THAN_EQUAL double_value_expAddSubtract .
+
+    '+'  shift, and go to state 70
+    '-'  shift, and go to state 71
+
+    $default  reduce using rule 84 (Bexp)
+
+
+state 162
+
+   54 double_value_expAddSubtract: double_value_expAddSubtract . '+' double_value_component
+   55                            | double_value_expAddSubtract . '-' double_value_component
+   85 Bexp: double_value_expAddSubtract EQUAL_EQUAL double_value_expAddSubtract .
+
+    '+'  shift, and go to state 70
+    '-'  shift, and go to state 71
+
+    $default  reduce using rule 85 (Bexp)
+
+
+state 163
+
+   54 double_value_expAddSubtract: double_value_expAddSubtract . '+' double_value_component
+   55                            | double_value_expAddSubtract . '-' double_value_component
+   86 Bexp: double_value_expAddSubtract NOT_EQUAL double_value_expAddSubtract .
+
+    '+'  shift, and go to state 70
+    '-'  shift, and go to state 71
+
+    $default  reduce using rule 86 (Bexp)
+
+
+state 164
+
+   54 double_value_expAddSubtract: double_value_expAddSubtract . '+' double_value_component
+   55                            | double_value_expAddSubtract . '-' double_value_component
+   81 Bexp: double_value_expAddSubtract '>' double_value_expAddSubtract .
+
+    '+'  shift, and go to state 70
+    '-'  shift, and go to state 71
+
+    $default  reduce using rule 81 (Bexp)
+
+
+state 165
+
+   54 double_value_expAddSubtract: double_value_expAddSubtract . '+' double_value_component
+   55                            | double_value_expAddSubtract . '-' double_value_component
+   83 Bexp: double_value_expAddSubtract '<' double_value_expAddSubtract .
+
+    '+'  shift, and go to state 70
+    '-'  shift, and go to state 71
+
+    $default  reduce using rule 83 (Bexp)
+
+
+state 166
+
+   34 if_statement: IF_STATEMENT_TOKEN '(' Bexp ')' SCOPE_START_TOKEN . line SCOPE_END_TOKEN
+
+    exit_command                 shift, and go to state 1
+    Rakam                        shift, and go to state 2
+    TOKEN_Hroof                  shift, and go to state 3
+    TOKEN_3ashry                 shift, and go to state 4
+    TOKEN_Harf                   shift, and go to state 5
+    TOKEN_Boolean                shift, and go to state 6
+    CONSTANT_TOKEN               shift, and go to state 7
+    DOUBE_FLOATING_POINT         shift, and go to state 8
+    STATEMENT_TERMINATOR_TOKEN   shift, and go to state 9
+    IF_STATEMENT_TOKEN           shift, and go to state 10
+    SWITCH_CASE_BEGINNING_TOKEN  shift, and go to state 11
+    FOR_LOOP_STATMENT_TOKEN      shift, and go to state 12
+    WHILE_LOOP_STATEMENT_TOKEN   shift, and go to state 13
+    DO_STATEMENT_TOKEN           shift, and go to state 14
+    IDENTIFIER_TOKEN             shift, and go to state 15
+    '('                          shift, and go to state 16
+    '-'                          shift, and go to state 17
+
+    line                         go to state 175
+    declaration                  go to state 19
+    data_type                    go to state 20
+    assignment                   go to state 21
+    if_statement                 go to state 22
+    switch_statement             go to state 23
+    for_statement                go to state 24
+    while_statement              go to state 25
+    repeat_statement             go to state 26
+    double_value_expAddSubtract  go to state 27
+    double_value_component       go to state 28
+    double_value_factor          go to state 29
+    double_value_term            go to state 30
+
+
+state 167
+
+   36 switch_statement: SWITCH_CASE_BEGINNING_TOKEN '(' IDENTIFIER_TOKEN ')' SWITCH_CASE_START_CASES_TOKEN . ':' case_statement SWITCH_DEFAULT_CASE_BEGINNING_TOKEN line SWITCH_CASE_END_CASES_TOKEN
+
+    ':'  shift, and go to state 176
+
+
+state 168
+
+   41 for_statement: FOR_LOOP_STATMENT_TOKEN '(' for_iterator STATEMENT_TERMINATOR_TOKEN Bexp1 . STATEMENT_TERMINATOR_TOKEN assignment ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+   87 Bexp1: Bexp1 . OR Bexpand
+
+    STATEMENT_TERMINATOR_TOKEN  shift, and go to state 177
+    OR                          shift, and go to state 139
+
+
+state 169
+
+   91 Bexpbracket: '(' Bexp1 ')' .
+
+    $default  reduce using rule 91 (Bexpbracket)
+
+
+state 170
+
+   87 Bexp1: Bexp1 OR Bexpand .
+   89 Bexpand: Bexpand . AND Bexpbracket
+
+    AND  shift, and go to state 141
+
+    $default  reduce using rule 87 (Bexp1)
+
+
+state 171
+
+   42 while_statement: WHILE_LOOP_STATEMENT_TOKEN '(' Bexp1 ')' SCOPE_START_TOKEN . line SCOPE_END_TOKEN
+
+    exit_command                 shift, and go to state 1
+    Rakam                        shift, and go to state 2
+    TOKEN_Hroof                  shift, and go to state 3
+    TOKEN_3ashry                 shift, and go to state 4
+    TOKEN_Harf                   shift, and go to state 5
+    TOKEN_Boolean                shift, and go to state 6
+    CONSTANT_TOKEN               shift, and go to state 7
+    DOUBE_FLOATING_POINT         shift, and go to state 8
+    STATEMENT_TERMINATOR_TOKEN   shift, and go to state 9
+    IF_STATEMENT_TOKEN           shift, and go to state 10
+    SWITCH_CASE_BEGINNING_TOKEN  shift, and go to state 11
+    FOR_LOOP_STATMENT_TOKEN      shift, and go to state 12
+    WHILE_LOOP_STATEMENT_TOKEN   shift, and go to state 13
+    DO_STATEMENT_TOKEN           shift, and go to state 14
+    IDENTIFIER_TOKEN             shift, and go to state 15
+    '('                          shift, and go to state 16
+    '-'                          shift, and go to state 17
+
+    line                         go to state 178
+    declaration                  go to state 19
+    data_type                    go to state 20
+    assignment                   go to state 21
+    if_statement                 go to state 22
+    switch_statement             go to state 23
+    for_statement                go to state 24
+    while_statement              go to state 25
+    repeat_statement             go to state 26
+    double_value_expAddSubtract  go to state 27
+    double_value_component       go to state 28
+    double_value_factor          go to state 29
+    double_value_term            go to state 30
+
+
+state 172
+
+   89 Bexpand: Bexpand AND Bexpbracket .
+
+    $default  reduce using rule 89 (Bexpand)
+
+
+state 173
+
+   42 while_statement: WHILE_LOOP_STATEMENT_TOKEN '(' Bexp1 . ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+   43 repeat_statement: DO_STATEMENT_TOKEN line WHILE_LOOP_STATEMENT_TOKEN '(' Bexp1 . ')' STATEMENT_TERMINATOR_TOKEN
+   87 Bexp1: Bexp1 . OR Bexpand
+
+    OR   shift, and go to state 139
+    ')'  shift, and go to state 179
+
+
+state 174
+
+   35 if_statement: if_statement ELSE_STATEMENT_TOKEN SCOPE_START_TOKEN line SCOPE_END_TOKEN .
+
+    $default  reduce using rule 35 (if_statement)
+
+
+state 175
+
+    4 line: line . declaration STATEMENT_TERMINATOR_TOKEN
+    5     | line . assignment STATEMENT_TERMINATOR_TOKEN
+    6     | line . for_statement
+    8     | line . if_statement
+   10     | line . switch_statement
+   12     | line . while_statement
+   14     | line . repeat_statement
+   16     | line . exit_command STATEMENT_TERMINATOR_TOKEN
+   18     | line . expbitwise STATEMENT_TERMINATOR_TOKEN
+   19     | line . double_value_expAddSubtract STATEMENT_TERMINATOR_TOKEN
+   34 if_statement: IF_STATEMENT_TOKEN '(' Bexp ')' SCOPE_START_TOKEN line . SCOPE_END_TOKEN
+
+    exit_command                 shift, and go to state 42
+    Rakam                        shift, and go to state 2
+    TOKEN_Hroof                  shift, and go to state 3
+    TOKEN_3ashry                 shift, and go to state 4
+    TOKEN_Harf                   shift, and go to state 5
+    TOKEN_Boolean                shift, and go to state 6
+    CONSTANT_TOKEN               shift, and go to state 7
+    LONG_INTEGER                 shift, and go to state 43
+    DOUBE_FLOATING_POINT         shift, and go to state 8
+    CHARACTER_VALUE              shift, and go to state 44
+    TrueFalse                    shift, and go to state 45
+    SCOPE_END_TOKEN              shift, and go to state 180
+    IF_STATEMENT_TOKEN           shift, and go to state 10
+    SWITCH_CASE_BEGINNING_TOKEN  shift, and go to state 11
+    FOR_LOOP_STATMENT_TOKEN      shift, and go to state 12
+    WHILE_LOOP_STATEMENT_TOKEN   shift, and go to state 13
+    DO_STATEMENT_TOKEN           shift, and go to state 14
+    IDENTIFIER_TOKEN             shift, and go to state 46
+    '('                          shift, and go to state 47
+    '-'                          shift, and go to state 48
+    '~'                          shift, and go to state 49
+
+    declaration                  go to state 50
+    data_type                    go to state 20
+    assignment                   go to state 51
+    if_statement                 go to state 52
+    switch_statement             go to state 53
+    for_statement                go to state 54
+    while_statement              go to state 55
+    repeat_statement             go to state 56
+    expbitwise                   go to state 57
+    exp                          go to state 58
+    expAddSubtract               go to state 59
+    double_value_expAddSubtract  go to state 60
+    component                    go to state 61
+    double_value_component       go to state 28
+    factor                       go to state 62
+    double_value_factor          go to state 29
+    term                         go to state 63
+    double_value_term            go to state 30
+
+
+state 176
+
+   36 switch_statement: SWITCH_CASE_BEGINNING_TOKEN '(' IDENTIFIER_TOKEN ')' SWITCH_CASE_START_CASES_TOKEN ':' . case_statement SWITCH_DEFAULT_CASE_BEGINNING_TOKEN line SWITCH_CASE_END_CASES_TOKEN
+
+    '('  shift, and go to state 181
+
+    case_statement  go to state 182
+
+
+state 177
+
+   41 for_statement: FOR_LOOP_STATMENT_TOKEN '(' for_iterator STATEMENT_TERMINATOR_TOKEN Bexp1 STATEMENT_TERMINATOR_TOKEN . assignment ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    IDENTIFIER_TOKEN  shift, and go to state 15
+
+    assignment  go to state 183
+
+
+state 178
+
+    4 line: line . declaration STATEMENT_TERMINATOR_TOKEN
+    5     | line . assignment STATEMENT_TERMINATOR_TOKEN
+    6     | line . for_statement
+    8     | line . if_statement
+   10     | line . switch_statement
+   12     | line . while_statement
+   14     | line . repeat_statement
+   16     | line . exit_command STATEMENT_TERMINATOR_TOKEN
+   18     | line . expbitwise STATEMENT_TERMINATOR_TOKEN
+   19     | line . double_value_expAddSubtract STATEMENT_TERMINATOR_TOKEN
+   42 while_statement: WHILE_LOOP_STATEMENT_TOKEN '(' Bexp1 ')' SCOPE_START_TOKEN line . SCOPE_END_TOKEN
+
+    exit_command                 shift, and go to state 42
+    Rakam                        shift, and go to state 2
+    TOKEN_Hroof                  shift, and go to state 3
+    TOKEN_3ashry                 shift, and go to state 4
+    TOKEN_Harf                   shift, and go to state 5
+    TOKEN_Boolean                shift, and go to state 6
+    CONSTANT_TOKEN               shift, and go to state 7
+    LONG_INTEGER                 shift, and go to state 43
+    DOUBE_FLOATING_POINT         shift, and go to state 8
+    CHARACTER_VALUE              shift, and go to state 44
+    TrueFalse                    shift, and go to state 45
+    SCOPE_END_TOKEN              shift, and go to state 184
+    IF_STATEMENT_TOKEN           shift, and go to state 10
+    SWITCH_CASE_BEGINNING_TOKEN  shift, and go to state 11
+    FOR_LOOP_STATMENT_TOKEN      shift, and go to state 12
+    WHILE_LOOP_STATEMENT_TOKEN   shift, and go to state 13
+    DO_STATEMENT_TOKEN           shift, and go to state 14
+    IDENTIFIER_TOKEN             shift, and go to state 46
+    '('                          shift, and go to state 47
+    '-'                          shift, and go to state 48
+    '~'                          shift, and go to state 49
+
+    declaration                  go to state 50
+    data_type                    go to state 20
+    assignment                   go to state 51
+    if_statement                 go to state 52
+    switch_statement             go to state 53
+    for_statement                go to state 54
+    while_statement              go to state 55
+    repeat_statement             go to state 56
+    expbitwise                   go to state 57
+    exp                          go to state 58
+    expAddSubtract               go to state 59
+    double_value_expAddSubtract  go to state 60
+    component                    go to state 61
+    double_value_component       go to state 28
+    factor                       go to state 62
+    double_value_factor          go to state 29
+    term                         go to state 63
+    double_value_term            go to state 30
+
+
+state 179
+
+   42 while_statement: WHILE_LOOP_STATEMENT_TOKEN '(' Bexp1 ')' . SCOPE_START_TOKEN line SCOPE_END_TOKEN
+   43 repeat_statement: DO_STATEMENT_TOKEN line WHILE_LOOP_STATEMENT_TOKEN '(' Bexp1 ')' . STATEMENT_TERMINATOR_TOKEN
+
+    SCOPE_START_TOKEN           shift, and go to state 171
+    STATEMENT_TERMINATOR_TOKEN  shift, and go to state 185
+
+
+state 180
+
+   34 if_statement: IF_STATEMENT_TOKEN '(' Bexp ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN .
+
+    $default  reduce using rule 34 (if_statement)
+
+
+state 181
+
+   38 case_statement: '(' . term ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+
+    term  go to state 186
+
+
+state 182
+
+   36 switch_statement: SWITCH_CASE_BEGINNING_TOKEN '(' IDENTIFIER_TOKEN ')' SWITCH_CASE_START_CASES_TOKEN ':' case_statement . SWITCH_DEFAULT_CASE_BEGINNING_TOKEN line SWITCH_CASE_END_CASES_TOKEN
+   37 case_statement: case_statement . '(' term ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    SWITCH_DEFAULT_CASE_BEGINNING_TOKEN  shift, and go to state 187
+    '('                                  shift, and go to state 188
+
+
+state 183
+
+   41 for_statement: FOR_LOOP_STATMENT_TOKEN '(' for_iterator STATEMENT_TERMINATOR_TOKEN Bexp1 STATEMENT_TERMINATOR_TOKEN assignment . ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    ')'  shift, and go to state 189
+
+
+state 184
+
+   42 while_statement: WHILE_LOOP_STATEMENT_TOKEN '(' Bexp1 ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN .
+
+    $default  reduce using rule 42 (while_statement)
+
+
+state 185
+
+   43 repeat_statement: DO_STATEMENT_TOKEN line WHILE_LOOP_STATEMENT_TOKEN '(' Bexp1 ')' STATEMENT_TERMINATOR_TOKEN .
+
+    $default  reduce using rule 43 (repeat_statement)
+
+
+state 186
+
+   38 case_statement: '(' term . ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    ')'  shift, and go to state 190
+
+
+state 187
+
+   36 switch_statement: SWITCH_CASE_BEGINNING_TOKEN '(' IDENTIFIER_TOKEN ')' SWITCH_CASE_START_CASES_TOKEN ':' case_statement SWITCH_DEFAULT_CASE_BEGINNING_TOKEN . line SWITCH_CASE_END_CASES_TOKEN
+
+    exit_command                 shift, and go to state 1
+    Rakam                        shift, and go to state 2
+    TOKEN_Hroof                  shift, and go to state 3
+    TOKEN_3ashry                 shift, and go to state 4
+    TOKEN_Harf                   shift, and go to state 5
+    TOKEN_Boolean                shift, and go to state 6
+    CONSTANT_TOKEN               shift, and go to state 7
+    DOUBE_FLOATING_POINT         shift, and go to state 8
+    STATEMENT_TERMINATOR_TOKEN   shift, and go to state 9
+    IF_STATEMENT_TOKEN           shift, and go to state 10
+    SWITCH_CASE_BEGINNING_TOKEN  shift, and go to state 11
+    FOR_LOOP_STATMENT_TOKEN      shift, and go to state 12
+    WHILE_LOOP_STATEMENT_TOKEN   shift, and go to state 13
+    DO_STATEMENT_TOKEN           shift, and go to state 14
+    IDENTIFIER_TOKEN             shift, and go to state 15
+    '('                          shift, and go to state 16
+    '-'                          shift, and go to state 17
+
+    line                         go to state 191
+    declaration                  go to state 19
+    data_type                    go to state 20
+    assignment                   go to state 21
+    if_statement                 go to state 22
+    switch_statement             go to state 23
+    for_statement                go to state 24
+    while_statement              go to state 25
+    repeat_statement             go to state 26
+    double_value_expAddSubtract  go to state 27
+    double_value_component       go to state 28
+    double_value_factor          go to state 29
+    double_value_term            go to state 30
+
+
+state 188
+
+   37 case_statement: case_statement '(' . term ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    LONG_INTEGER      shift, and go to state 43
+    CHARACTER_VALUE   shift, and go to state 44
+    TrueFalse         shift, and go to state 45
+    IDENTIFIER_TOKEN  shift, and go to state 75
+
+    term  go to state 192
+
+
+state 189
+
+   41 for_statement: FOR_LOOP_STATMENT_TOKEN '(' for_iterator STATEMENT_TERMINATOR_TOKEN Bexp1 STATEMENT_TERMINATOR_TOKEN assignment ')' . SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    SCOPE_START_TOKEN  shift, and go to state 193
+
+
+state 190
+
+   38 case_statement: '(' term ')' . SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    SCOPE_START_TOKEN  shift, and go to state 194
+
+
+state 191
+
+    4 line: line . declaration STATEMENT_TERMINATOR_TOKEN
+    5     | line . assignment STATEMENT_TERMINATOR_TOKEN
+    6     | line . for_statement
+    8     | line . if_statement
+   10     | line . switch_statement
+   12     | line . while_statement
+   14     | line . repeat_statement
+   16     | line . exit_command STATEMENT_TERMINATOR_TOKEN
+   18     | line . expbitwise STATEMENT_TERMINATOR_TOKEN
+   19     | line . double_value_expAddSubtract STATEMENT_TERMINATOR_TOKEN
+   36 switch_statement: SWITCH_CASE_BEGINNING_TOKEN '(' IDENTIFIER_TOKEN ')' SWITCH_CASE_START_CASES_TOKEN ':' case_statement SWITCH_DEFAULT_CASE_BEGINNING_TOKEN line . SWITCH_CASE_END_CASES_TOKEN
+
+    exit_command                 shift, and go to state 42
+    Rakam                        shift, and go to state 2
+    TOKEN_Hroof                  shift, and go to state 3
+    TOKEN_3ashry                 shift, and go to state 4
+    TOKEN_Harf                   shift, and go to state 5
+    TOKEN_Boolean                shift, and go to state 6
+    CONSTANT_TOKEN               shift, and go to state 7
+    LONG_INTEGER                 shift, and go to state 43
+    DOUBE_FLOATING_POINT         shift, and go to state 8
+    CHARACTER_VALUE              shift, and go to state 44
+    TrueFalse                    shift, and go to state 45
+    IF_STATEMENT_TOKEN           shift, and go to state 10
+    SWITCH_CASE_BEGINNING_TOKEN  shift, and go to state 11
+    SWITCH_CASE_END_CASES_TOKEN  shift, and go to state 195
+    FOR_LOOP_STATMENT_TOKEN      shift, and go to state 12
+    WHILE_LOOP_STATEMENT_TOKEN   shift, and go to state 13
+    DO_STATEMENT_TOKEN           shift, and go to state 14
+    IDENTIFIER_TOKEN             shift, and go to state 46
+    '('                          shift, and go to state 47
+    '-'                          shift, and go to state 48
+    '~'                          shift, and go to state 49
+
+    declaration                  go to state 50
+    data_type                    go to state 20
+    assignment                   go to state 51
+    if_statement                 go to state 52
+    switch_statement             go to state 53
+    for_statement                go to state 54
+    while_statement              go to state 55
+    repeat_statement             go to state 56
+    expbitwise                   go to state 57
+    exp                          go to state 58
+    expAddSubtract               go to state 59
+    double_value_expAddSubtract  go to state 60
+    component                    go to state 61
+    double_value_component       go to state 28
+    factor                       go to state 62
+    double_value_factor          go to state 29
+    term                         go to state 63
+    double_value_term            go to state 30
+
+
+state 192
+
+   37 case_statement: case_statement '(' term . ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    ')'  shift, and go to state 196
+
+
+state 193
+
+   41 for_statement: FOR_LOOP_STATMENT_TOKEN '(' for_iterator STATEMENT_TERMINATOR_TOKEN Bexp1 STATEMENT_TERMINATOR_TOKEN assignment ')' SCOPE_START_TOKEN . line SCOPE_END_TOKEN
+
+    exit_command                 shift, and go to state 1
+    Rakam                        shift, and go to state 2
+    TOKEN_Hroof                  shift, and go to state 3
+    TOKEN_3ashry                 shift, and go to state 4
+    TOKEN_Harf                   shift, and go to state 5
+    TOKEN_Boolean                shift, and go to state 6
+    CONSTANT_TOKEN               shift, and go to state 7
+    DOUBE_FLOATING_POINT         shift, and go to state 8
+    STATEMENT_TERMINATOR_TOKEN   shift, and go to state 9
+    IF_STATEMENT_TOKEN           shift, and go to state 10
+    SWITCH_CASE_BEGINNING_TOKEN  shift, and go to state 11
+    FOR_LOOP_STATMENT_TOKEN      shift, and go to state 12
+    WHILE_LOOP_STATEMENT_TOKEN   shift, and go to state 13
+    DO_STATEMENT_TOKEN           shift, and go to state 14
+    IDENTIFIER_TOKEN             shift, and go to state 15
+    '('                          shift, and go to state 16
+    '-'                          shift, and go to state 17
+
+    line                         go to state 197
+    declaration                  go to state 19
+    data_type                    go to state 20
+    assignment                   go to state 21
+    if_statement                 go to state 22
+    switch_statement             go to state 23
+    for_statement                go to state 24
+    while_statement              go to state 25
+    repeat_statement             go to state 26
+    double_value_expAddSubtract  go to state 27
+    double_value_component       go to state 28
+    double_value_factor          go to state 29
+    double_value_term            go to state 30
+
+
+state 194
+
+   38 case_statement: '(' term ')' SCOPE_START_TOKEN . line SCOPE_END_TOKEN
+
+    exit_command                 shift, and go to state 1
+    Rakam                        shift, and go to state 2
+    TOKEN_Hroof                  shift, and go to state 3
+    TOKEN_3ashry                 shift, and go to state 4
+    TOKEN_Harf                   shift, and go to state 5
+    TOKEN_Boolean                shift, and go to state 6
+    CONSTANT_TOKEN               shift, and go to state 7
+    DOUBE_FLOATING_POINT         shift, and go to state 8
+    STATEMENT_TERMINATOR_TOKEN   shift, and go to state 9
+    IF_STATEMENT_TOKEN           shift, and go to state 10
+    SWITCH_CASE_BEGINNING_TOKEN  shift, and go to state 11
+    FOR_LOOP_STATMENT_TOKEN      shift, and go to state 12
+    WHILE_LOOP_STATEMENT_TOKEN   shift, and go to state 13
+    DO_STATEMENT_TOKEN           shift, and go to state 14
+    IDENTIFIER_TOKEN             shift, and go to state 15
+    '('                          shift, and go to state 16
+    '-'                          shift, and go to state 17
+
+    line                         go to state 198
+    declaration                  go to state 19
+    data_type                    go to state 20
+    assignment                   go to state 21
+    if_statement                 go to state 22
+    switch_statement             go to state 23
+    for_statement                go to state 24
+    while_statement              go to state 25
+    repeat_statement             go to state 26
+    double_value_expAddSubtract  go to state 27
+    double_value_component       go to state 28
+    double_value_factor          go to state 29
+    double_value_term            go to state 30
+
+
+state 195
+
+   36 switch_statement: SWITCH_CASE_BEGINNING_TOKEN '(' IDENTIFIER_TOKEN ')' SWITCH_CASE_START_CASES_TOKEN ':' case_statement SWITCH_DEFAULT_CASE_BEGINNING_TOKEN line SWITCH_CASE_END_CASES_TOKEN .
+
+    $default  reduce using rule 36 (switch_statement)
+
+
+state 196
+
+   37 case_statement: case_statement '(' term ')' . SCOPE_START_TOKEN line SCOPE_END_TOKEN
+
+    SCOPE_START_TOKEN  shift, and go to state 199
+
+
+state 197
+
+    4 line: line . declaration STATEMENT_TERMINATOR_TOKEN
+    5     | line . assignment STATEMENT_TERMINATOR_TOKEN
+    6     | line . for_statement
+    8     | line . if_statement
+   10     | line . switch_statement
+   12     | line . while_statement
+   14     | line . repeat_statement
+   16     | line . exit_command STATEMENT_TERMINATOR_TOKEN
+   18     | line . expbitwise STATEMENT_TERMINATOR_TOKEN
+   19     | line . double_value_expAddSubtract STATEMENT_TERMINATOR_TOKEN
+   41 for_statement: FOR_LOOP_STATMENT_TOKEN '(' for_iterator STATEMENT_TERMINATOR_TOKEN Bexp1 STATEMENT_TERMINATOR_TOKEN assignment ')' SCOPE_START_TOKEN line . SCOPE_END_TOKEN
+
+    exit_command                 shift, and go to state 42
+    Rakam                        shift, and go to state 2
+    TOKEN_Hroof                  shift, and go to state 3
+    TOKEN_3ashry                 shift, and go to state 4
+    TOKEN_Harf                   shift, and go to state 5
+    TOKEN_Boolean                shift, and go to state 6
+    CONSTANT_TOKEN               shift, and go to state 7
+    LONG_INTEGER                 shift, and go to state 43
+    DOUBE_FLOATING_POINT         shift, and go to state 8
+    CHARACTER_VALUE              shift, and go to state 44
+    TrueFalse                    shift, and go to state 45
+    SCOPE_END_TOKEN              shift, and go to state 200
+    IF_STATEMENT_TOKEN           shift, and go to state 10
+    SWITCH_CASE_BEGINNING_TOKEN  shift, and go to state 11
+    FOR_LOOP_STATMENT_TOKEN      shift, and go to state 12
+    WHILE_LOOP_STATEMENT_TOKEN   shift, and go to state 13
+    DO_STATEMENT_TOKEN           shift, and go to state 14
+    IDENTIFIER_TOKEN             shift, and go to state 46
+    '('                          shift, and go to state 47
+    '-'                          shift, and go to state 48
+    '~'                          shift, and go to state 49
+
+    declaration                  go to state 50
+    data_type                    go to state 20
+    assignment                   go to state 51
+    if_statement                 go to state 52
+    switch_statement             go to state 53
+    for_statement                go to state 54
+    while_statement              go to state 55
+    repeat_statement             go to state 56
+    expbitwise                   go to state 57
+    exp                          go to state 58
+    expAddSubtract               go to state 59
+    double_value_expAddSubtract  go to state 60
+    component                    go to state 61
+    double_value_component       go to state 28
+    factor                       go to state 62
+    double_value_factor          go to state 29
+    term                         go to state 63
+    double_value_term            go to state 30
+
+
+state 198
+
+    4 line: line . declaration STATEMENT_TERMINATOR_TOKEN
+    5     | line . assignment STATEMENT_TERMINATOR_TOKEN
+    6     | line . for_statement
+    8     | line . if_statement
+   10     | line . switch_statement
+   12     | line . while_statement
+   14     | line . repeat_statement
+   16     | line . exit_command STATEMENT_TERMINATOR_TOKEN
+   18     | line . expbitwise STATEMENT_TERMINATOR_TOKEN
+   19     | line . double_value_expAddSubtract STATEMENT_TERMINATOR_TOKEN
+   38 case_statement: '(' term ')' SCOPE_START_TOKEN line . SCOPE_END_TOKEN
+
+    exit_command                 shift, and go to state 42
+    Rakam                        shift, and go to state 2
+    TOKEN_Hroof                  shift, and go to state 3
+    TOKEN_3ashry                 shift, and go to state 4
+    TOKEN_Harf                   shift, and go to state 5
+    TOKEN_Boolean                shift, and go to state 6
+    CONSTANT_TOKEN               shift, and go to state 7
+    LONG_INTEGER                 shift, and go to state 43
+    DOUBE_FLOATING_POINT         shift, and go to state 8
+    CHARACTER_VALUE              shift, and go to state 44
+    TrueFalse                    shift, and go to state 45
+    SCOPE_END_TOKEN              shift, and go to state 201
+    IF_STATEMENT_TOKEN           shift, and go to state 10
+    SWITCH_CASE_BEGINNING_TOKEN  shift, and go to state 11
+    FOR_LOOP_STATMENT_TOKEN      shift, and go to state 12
+    WHILE_LOOP_STATEMENT_TOKEN   shift, and go to state 13
+    DO_STATEMENT_TOKEN           shift, and go to state 14
+    IDENTIFIER_TOKEN             shift, and go to state 46
+    '('                          shift, and go to state 47
+    '-'                          shift, and go to state 48
+    '~'                          shift, and go to state 49
+
+    declaration                  go to state 50
+    data_type                    go to state 20
+    assignment                   go to state 51
+    if_statement                 go to state 52
+    switch_statement             go to state 53
+    for_statement                go to state 54
+    while_statement              go to state 55
+    repeat_statement             go to state 56
+    expbitwise                   go to state 57
+    exp                          go to state 58
+    expAddSubtract               go to state 59
+    double_value_expAddSubtract  go to state 60
+    component                    go to state 61
+    double_value_component       go to state 28
+    factor                       go to state 62
+    double_value_factor          go to state 29
+    term                         go to state 63
+    double_value_term            go to state 30
+
+
+state 199
+
+   37 case_statement: case_statement '(' term ')' SCOPE_START_TOKEN . line SCOPE_END_TOKEN
+
+    exit_command                 shift, and go to state 1
+    Rakam                        shift, and go to state 2
+    TOKEN_Hroof                  shift, and go to state 3
+    TOKEN_3ashry                 shift, and go to state 4
+    TOKEN_Harf                   shift, and go to state 5
+    TOKEN_Boolean                shift, and go to state 6
+    CONSTANT_TOKEN               shift, and go to state 7
+    DOUBE_FLOATING_POINT         shift, and go to state 8
+    STATEMENT_TERMINATOR_TOKEN   shift, and go to state 9
+    IF_STATEMENT_TOKEN           shift, and go to state 10
+    SWITCH_CASE_BEGINNING_TOKEN  shift, and go to state 11
+    FOR_LOOP_STATMENT_TOKEN      shift, and go to state 12
+    WHILE_LOOP_STATEMENT_TOKEN   shift, and go to state 13
+    DO_STATEMENT_TOKEN           shift, and go to state 14
+    IDENTIFIER_TOKEN             shift, and go to state 15
+    '('                          shift, and go to state 16
+    '-'                          shift, and go to state 17
+
+    line                         go to state 202
+    declaration                  go to state 19
+    data_type                    go to state 20
+    assignment                   go to state 21
+    if_statement                 go to state 22
+    switch_statement             go to state 23
+    for_statement                go to state 24
+    while_statement              go to state 25
+    repeat_statement             go to state 26
+    double_value_expAddSubtract  go to state 27
+    double_value_component       go to state 28
+    double_value_factor          go to state 29
+    double_value_term            go to state 30
+
+
+state 200
+
+   41 for_statement: FOR_LOOP_STATMENT_TOKEN '(' for_iterator STATEMENT_TERMINATOR_TOKEN Bexp1 STATEMENT_TERMINATOR_TOKEN assignment ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN .
+
+    $default  reduce using rule 41 (for_statement)
+
+
+state 201
+
+   38 case_statement: '(' term ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN .
+
+    $default  reduce using rule 38 (case_statement)
+
+
+state 202
+
+    4 line: line . declaration STATEMENT_TERMINATOR_TOKEN
+    5     | line . assignment STATEMENT_TERMINATOR_TOKEN
+    6     | line . for_statement
+    8     | line . if_statement
+   10     | line . switch_statement
+   12     | line . while_statement
+   14     | line . repeat_statement
+   16     | line . exit_command STATEMENT_TERMINATOR_TOKEN
+   18     | line . expbitwise STATEMENT_TERMINATOR_TOKEN
+   19     | line . double_value_expAddSubtract STATEMENT_TERMINATOR_TOKEN
+   37 case_statement: case_statement '(' term ')' SCOPE_START_TOKEN line . SCOPE_END_TOKEN
+
+    exit_command                 shift, and go to state 42
+    Rakam                        shift, and go to state 2
+    TOKEN_Hroof                  shift, and go to state 3
+    TOKEN_3ashry                 shift, and go to state 4
+    TOKEN_Harf                   shift, and go to state 5
+    TOKEN_Boolean                shift, and go to state 6
+    CONSTANT_TOKEN               shift, and go to state 7
+    LONG_INTEGER                 shift, and go to state 43
+    DOUBE_FLOATING_POINT         shift, and go to state 8
+    CHARACTER_VALUE              shift, and go to state 44
+    TrueFalse                    shift, and go to state 45
+    SCOPE_END_TOKEN              shift, and go to state 203
+    IF_STATEMENT_TOKEN           shift, and go to state 10
+    SWITCH_CASE_BEGINNING_TOKEN  shift, and go to state 11
+    FOR_LOOP_STATMENT_TOKEN      shift, and go to state 12
+    WHILE_LOOP_STATEMENT_TOKEN   shift, and go to state 13
+    DO_STATEMENT_TOKEN           shift, and go to state 14
+    IDENTIFIER_TOKEN             shift, and go to state 46
+    '('                          shift, and go to state 47
+    '-'                          shift, and go to state 48
+    '~'                          shift, and go to state 49
+
+    declaration                  go to state 50
+    data_type                    go to state 20
+    assignment                   go to state 51
+    if_statement                 go to state 52
+    switch_statement             go to state 53
+    for_statement                go to state 54
+    while_statement              go to state 55
+    repeat_statement             go to state 56
+    expbitwise                   go to state 57
+    exp                          go to state 58
+    expAddSubtract               go to state 59
+    double_value_expAddSubtract  go to state 60
+    component                    go to state 61
+    double_value_component       go to state 28
+    factor                       go to state 62
+    double_value_factor          go to state 29
+    term                         go to state 63
+    double_value_term            go to state 30
+
+
+state 203
+
+   37 case_statement: case_statement '(' term ')' SCOPE_START_TOKEN line SCOPE_END_TOKEN .
+
+    $default  reduce using rule 37 (case_statement)

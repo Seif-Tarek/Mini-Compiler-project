@@ -94,7 +94,7 @@ Scope* currentcope=NULL;
 
 	%type <VARIABLE> assignment  //Needs editing
 	%type <NUM> line exp expbitwise expAddSubtract term factor component
-	%type <DOOBLE>  double_value_exp  double_value_expAddSubtract double_value_term double_value_factor double_value_component
+	%type <DOOBLE>  double_value_expAddSubtract double_value_term double_value_factor double_value_component
 	
 	%type <BOOOL>  Bexp Bexp1 Bexpand Bexpbracket // 0 or 1 integers.
 	%type <VARIABLE> string_value_assignment
@@ -122,6 +122,8 @@ line    : assignment STATEMENT_TERMINATOR_TOKEN			{printf("Matched assignment\n"
 		| line exit_command STATEMENT_TERMINATOR_TOKEN	{printf("Matched fedahya\n");exit(EXIT_SUCCESS);}
 		| STATEMENT_TERMINATOR_TOKEN 					{printf("Matched Empty statement\n");}
 		| line expbitwise STATEMENT_TERMINATOR_TOKEN 	{printf("Matched Expression Statement\n");}
+		| line double_value_expAddSubtract STATEMENT_TERMINATOR_TOKEN 	{printf("Matched Expression Statement\n");}
+		| double_value_expAddSubtract STATEMENT_TERMINATOR_TOKEN					  	{printf("Matched Expression Statement\n");}
         ;
 		
 // Decalarations of variables and constants:
@@ -138,7 +140,7 @@ data_type: Rakam 		{;}
 		;		
 
 assignment : IDENTIFIER_TOKEN '=' expbitwise { ;} // printf("ya rab %c\n", typeid($3).name()[0]);
-			| IDENTIFIER_TOKEN '=' double_value_exp { Values val;
+			| IDENTIFIER_TOKEN '=' double_value_expAddSubtract { Values val;
 				val.Number = $3;
 				insert(DOUBLE,"yahia",false,val, currentcope); printf("ya rab %c\n", typeid($3).name()[0]);} 
 				
@@ -155,9 +157,8 @@ assignment : IDENTIFIER_TOKEN '=' expbitwise { ;} // printf("ya rab %c\n", typei
 string_value_assignment:  STRING_VALUE			{
 													$$ = $1;
 													printf("matched string value %s\n",$1); 
-												}
-						| IDENTIFIER_TOKEN		{;} //    $$ = symbolVal($1);
-		;
+												}		 //    $$ = symbolVal($1);
+						;
 
 // Flow Control Statements:
 
@@ -166,16 +167,12 @@ string_value_assignment:  STRING_VALUE			{
 if_statement: IF_STATEMENT_TOKEN '('Bexp')' SCOPE_START_TOKEN line SCOPE_END_TOKEN  	{;} // TODO: replace exp with Bexp
 		| if_statement ELSE_STATEMENT_TOKEN SCOPE_START_TOKEN line SCOPE_END_TOKEN 		{;}
 		;
-case_switch_opt: term 					{;}
-			 | term 					{;}
-			 | term 					{;}
-			 ;
 
 // 2. switch case:
 switch_statement: SWITCH_CASE_BEGINNING_TOKEN '('IDENTIFIER_TOKEN')' SWITCH_CASE_START_CASES_TOKEN ':' case_statement SWITCH_DEFAULT_CASE_BEGINNING_TOKEN line SWITCH_CASE_END_CASES_TOKEN {;}
 		;
 
-case_statement: case_statement '('case_switch_opt')'  SCOPE_START_TOKEN line SCOPE_END_TOKEN | '('case_switch_opt')'  SCOPE_START_TOKEN line SCOPE_END_TOKEN 	{;}
+case_statement: case_statement '('term')'  SCOPE_START_TOKEN line SCOPE_END_TOKEN | '('term')'  SCOPE_START_TOKEN line SCOPE_END_TOKEN 	{;}
 		;
 // 3. for loop:
 for_iterator: assignment 				{;}
@@ -204,18 +201,18 @@ exp    	: expAddSubtract                		  {$$ = $1;}
        	| exp SHIFT_RIGHT expAddSubtract          {$$ = $1 >> $3;}
        	;
 
-double_value_exp    	: double_value_expAddSubtract                		  {;}
-       	| double_value_exp  double_value_expAddSubtract           {;}
-       	;
+// double_value_exp    	: double_value_expAddSubtract                		  {;}
+//        	| double_value_exp  double_value_expAddSubtract           {;}
+//        	;
 
 expAddSubtract  : component                  {$$ = $1;}
 			    | expAddSubtract '+' component          {$$ = $1 + $3;}
 				| expAddSubtract '-' component          {$$ = $1 - $3;}
 				;
 
-double_value_expAddSubtract  : double_value_component                  {$$ = $1;}
-			    | double_value_expAddSubtract '+' double_value_component          {$$ = $1 + $3; }
+double_value_expAddSubtract  :  double_value_expAddSubtract '+' double_value_component          {$$ = $1 + $3; }
 				| double_value_expAddSubtract '-' double_value_component          {$$ = $1 - $3;}
+				| double_value_component                  {$$ = $1;}
 				;
 
 component   : component '*' factor       {$$ = $1 * $3;}
@@ -234,10 +231,10 @@ factor  : '(' expbitwise ')'            {$$ = $2;}
 	    | term                   {$$ = $1;}
  		;
  
-double_value_factor  : '(' double_value_exp ')'		{$$ = $2;}
+double_value_factor  : '(' double_value_expAddSubtract ')'		{$$ = $2;}
 	    | double_value_term                   		{$$ = $1;}
-		| '-' double_value_term       			    {$$ = -$2;}
- 		;
+		| '-' double_value_factor       			    {$$ = -$2;}
+		;
 		
 term   	: LONG_INTEGER          {$$ = $1; printf("i matched integer %d\n",$1);}
 		| CHARACTER_VALUE		{$$ = $1; printf("i matched TTT %d\n",$1);}
@@ -251,7 +248,7 @@ term   	: LONG_INTEGER          {$$ = $1; printf("i matched integer %d\n",$1);}
         ;
 
 double_value_term: DOUBE_FLOATING_POINT 	{$$ = $1; printf("i matched double %f\n",$1);}
-				| IDENTIFIER_TOKEN		{;} //    $$ = symbolVal($1);
+				//| IDENTIFIER_TOKEN		{;} //    $$ = symbolVal($1);
 		;
 
 // Afsel 3shan al precedance.
@@ -261,12 +258,12 @@ Bexp	: exp '>' exp					{$$ = $1 > $3;}
 		| exp LESS_THAN_EQUAL exp		{$$ = $1 <= $3;}
 		| exp EQUAL_EQUAL exp			{$$ = $1 == $3;}
 		| exp NOT_EQUAL exp				{$$ = $1 != $3;}
-		| double_value_exp '>' double_value_exp					{$$ = $1 > $3;}
- 		| double_value_exp GREATER_THAN_EQUAL double_value_exp	{$$ = $1 >= $3;}
-	    | double_value_exp '<' double_value_exp					{$$ = $1 < $3;}
-		| double_value_exp LESS_THAN_EQUAL double_value_exp		{$$ = $1 <= $3;}
-		| double_value_exp EQUAL_EQUAL double_value_exp			{$$ = $1 == $3;}
-		| double_value_exp NOT_EQUAL double_value_exp			{$$ = $1 != $3;}
+		| double_value_expAddSubtract '>' double_value_expAddSubtract					{$$ = $1 > $3;}
+ 		| double_value_expAddSubtract GREATER_THAN_EQUAL double_value_expAddSubtract	{$$ = $1 >= $3;}
+	    | double_value_expAddSubtract '<' double_value_expAddSubtract					{$$ = $1 < $3;}
+		| double_value_expAddSubtract LESS_THAN_EQUAL double_value_expAddSubtract		{$$ = $1 <= $3;}
+		| double_value_expAddSubtract EQUAL_EQUAL double_value_expAddSubtract			{$$ = $1 == $3;}
+		| double_value_expAddSubtract NOT_EQUAL double_value_expAddSubtract			{$$ = $1 != $3;}
 		;
 
 Bexp1	: Bexp1 OR Bexpand					{$$ = $1 || $3;}
