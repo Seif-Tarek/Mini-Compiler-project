@@ -13,6 +13,7 @@ Rakam                        {return Rakam;}
 Kelma                        {return TOKEN_Hroof;}
 TeF                          {return TOKEN_Boolean;}
 7rf                          {return TOKEN_Harf;}
+Atba3                        {return TOKEN_Atba3;}
 3ashry                       {return TOKEN_3ashry;}
 Sabet                        {return CONSTANT_TOKEN;}
 Law                          {return IF_STATEMENT_TOKEN;}
@@ -43,7 +44,7 @@ False                        {yylval.BOOOL = 2; return TrueFalse;}
 [\+\-*/%=()|&^<>]            {return yytext[0];}
 [0-9]+\.[0-9]+               {yylval.DOOBLE = atof(yytext); return DOUBE_FLOATING_POINT;}
 '.'                          {yylval.LETTER = yytext[1]; return CHARACTER_VALUE;}
-\".*\"                         {yylval.VARIABLE = yytext; return STRING_VALUE;}
+\"(\\.|[^\\\"])*\"            {yylval.VARIABLE = yytext; return STRING_VALUE;}
 ;                            {return STATEMENT_TERMINATOR_TOKEN;}
 .                            {ECHO; yyerror ("unexpected character");}
 

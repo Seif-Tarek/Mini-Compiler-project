@@ -1,12 +1,26 @@
 %{
 void yyerror (char *s);
 int yylex();
+#include<iostream>
 #include <stdio.h>     /* C declarations used in actions */
 #include <stdlib.h>
 #include <ctype.h>
-int symbols[52];
-int symbolVal(char symbol);
-void updateSymbolVal(char symbol, int val);
+#include <unordered_map>
+#include <utility>
+#include <typeinfo>
+
+#include "scope.hpp"
+using namespace std;
+OPERATION_RETURN insert(int type, char* name, bool isConstant, Values value, Scope *currentTable);
+Scope *lookUp(char *name, Scope *currentTable);
+// int symbols[52];
+// int symbolVal(char symbol);
+// void updateSymbolVal(char symbol, int val);
+
+Scope* mainscope=NULL;
+Scope* currentcope=NULL;
+
+
 %}
 
 %union {
@@ -29,6 +43,7 @@ void updateSymbolVal(char symbol, int val);
 	%token TOKEN_Harf
 	%token TOKEN_Boolean
 	%token CONSTANT_TOKEN
+	%token TOKEN_Atba3
 
 // Tokens for Constant Numerics
 	%token <NUM>	  LONG_INTEGER
@@ -60,7 +75,7 @@ void updateSymbolVal(char symbol, int val);
 // while:
 	%token WHILE_LOOP_STATEMENT_TOKEN
 
-//Do while:
+// Do while:
 	%token DO_STATEMENT_TOKEN
 
 // Coding:
@@ -80,10 +95,11 @@ void updateSymbolVal(char symbol, int val);
 	%type <VARIABLE> assignment  //Needs editing
 	%type <NUM> line exp expbitwise expAddSubtract term factor component
 	%type <DOOBLE>  double_value_exp  double_value_expAddSubtract double_value_term double_value_factor double_value_component
-
+	
 	%type <BOOOL>  Bexp Bexp1 Bexpand Bexpbracket // 0 or 1 integers.
 	%type <VARIABLE> string_value_assignment
-	/// EDITTTTTTTTTTTTTTTTTTTT
+
+	// EDITTTTTTTTTTTTTTTTTTTT
 %%
 
 /* descriptions of expected inputs     corresponding actions (in C) */
@@ -109,7 +125,7 @@ line    : assignment STATEMENT_TERMINATOR_TOKEN			{printf("Matched assignment\n"
         ;
 		
 // Decalarations of variables and constants:
-declaration: data_type IDENTIFIER_TOKEN 							{;} //updateSymbolVal() } // TODO: update Symbol table
+declaration: data_type IDENTIFIER_TOKEN 							{;} // updateSymbolVal() } // TODO: update Symbol table
 		| data_type assignment							 	  		{;}
 		| CONSTANT_TOKEN data_type assignment 						{;} // TODO: when it's a constant, mark it so you can not update it later on
 		;
@@ -121,19 +137,26 @@ data_type: Rakam 		{;}
 		| TOKEN_Hroof   {;}
 		;		
 
-assignment : IDENTIFIER_TOKEN '=' assingment_value {;} //updateSymbolVal($1,$3); } // TODO: gowa el function law el variable msh mawgood, zawedo
-		| IDENTIFIER_TOKEN '=' string_value_assignment { printf("string is matched %s\n",$3);}
+assignment : IDENTIFIER_TOKEN '=' expbitwise { ;} // printf("ya rab %c\n", typeid($3).name()[0]);
+			| IDENTIFIER_TOKEN '=' double_value_exp { Values val;
+				val.Number = $3;
+				insert(DOUBLE,"yahia",false,val, currentcope); printf("ya rab %c\n", typeid($3).name()[0]);} 
+				
+			| IDENTIFIER_TOKEN '=' Bexp1 { printf("ya rab %c\n", typeid($3).name()[0]);} // updateSymbolVal($1,$3); } // TODO: gowa el function law el variable msh mawgood, zawedo
+			| IDENTIFIER_TOKEN '=' string_value_assignment { printf("string is matched %s\n",$3);}
 		;
 
-assingment_value: expbitwise 	{;}
-		| double_value_exp		{; printf("matched double value expression %f\n",$1);}
-		| Bexp1					{;}
-		;
+// print_stmt:  TOKEN_Harf Bexp1  {printf("%s\n",$2);}
+// 		  |  TOKEN_Harf expbitwise  {printf("%s\n",$2);}
+// 		  |  TOKEN_Harf double_value_exp  {printf("%s\n",$2);}
+// 		  |  TOKEN_Harf string_value_assignment  {printf("%s\n",$2);}
+// 		  ;
 
 string_value_assignment:  STRING_VALUE			{
 													$$ = $1;
 													printf("matched string value %s\n",$1); 
 												}
+						| IDENTIFIER_TOKEN		{;} //    $$ = symbolVal($1);
 		;
 
 // Flow Control Statements:
@@ -143,12 +166,16 @@ string_value_assignment:  STRING_VALUE			{
 if_statement: IF_STATEMENT_TOKEN '('Bexp')' SCOPE_START_TOKEN line SCOPE_END_TOKEN  	{;} // TODO: replace exp with Bexp
 		| if_statement ELSE_STATEMENT_TOKEN SCOPE_START_TOKEN line SCOPE_END_TOKEN 		{;}
 		;
+case_switch_opt: term 					{;}
+			 | term 					{;}
+			 | term 					{;}
+			 ;
 
 // 2. switch case:
 switch_statement: SWITCH_CASE_BEGINNING_TOKEN '('IDENTIFIER_TOKEN')' SWITCH_CASE_START_CASES_TOKEN ':' case_statement SWITCH_DEFAULT_CASE_BEGINNING_TOKEN line SWITCH_CASE_END_CASES_TOKEN {;}
 		;
 
-case_statement: case_statement '('term')'  SCOPE_START_TOKEN line SCOPE_END_TOKEN | '('term')'  SCOPE_START_TOKEN line SCOPE_END_TOKEN 	{;}
+case_statement: case_statement '('case_switch_opt')'  SCOPE_START_TOKEN line SCOPE_END_TOKEN | '('case_switch_opt')'  SCOPE_START_TOKEN line SCOPE_END_TOKEN 	{;}
 		;
 // 3. for loop:
 for_iterator: assignment 				{;}
@@ -209,12 +236,13 @@ factor  : '(' expbitwise ')'            {$$ = $2;}
  
 double_value_factor  : '(' double_value_exp ')'		{$$ = $2;}
 	    | double_value_term                   		{$$ = $1;}
+		| '-' double_value_term       			    {$$ = -$2;}
  		;
 		
 term   	: LONG_INTEGER          {$$ = $1; printf("i matched integer %d\n",$1);}
-		| CHARACTER_VALUE		{$$ = $1;}
+		| CHARACTER_VALUE		{$$ = $1; printf("i matched TTT %d\n",$1);}
 		| TrueFalse				{$$ = $1;}
-		| IDENTIFIER_TOKEN		{;}//$$ = symbolVal($1);
+		| IDENTIFIER_TOKEN		{;} //    $$ = symbolVal($1);
 		
 		// if the matched identifier refers to String type:
 			// return the address of this string as a long, pass it to the one we assign it to
@@ -223,6 +251,7 @@ term   	: LONG_INTEGER          {$$ = $1; printf("i matched integer %d\n",$1);}
         ;
 
 double_value_term: DOUBE_FLOATING_POINT 	{$$ = $1; printf("i matched double %f\n",$1);}
+				| IDENTIFIER_TOKEN		{;} //    $$ = symbolVal($1);
 		;
 
 // Afsel 3shan al precedance.
@@ -255,38 +284,114 @@ Bexpbracket  : '(' Bexp1 ')'            {$$ = $2;}
 
 %%                     /* C code */
 
-int computeSymbolIndex(char token)
-{
-	int idx = -1;
-	if(islower(token)) {
-		idx = token - 'a' + 26;
-	} else if(isupper(token)) {
-		idx = token - 'A';
-	}
-	return idx;
-} 
+// int computeSymbolIndex(char token)
+// {
+// 	int idx = -1;
+// 	if(islower(token)) {
+// 		idx = token - 'a' + 26;
+// 	} else if(isupper(token)) {
+// 		idx = token - 'A';
+// 	}
+// 	return idx;
+// } 
 
-/* returns the value of a given symbol */
-int symbolVal(char symbol)
+// /* returns the value of a given symbol */
+// int symbolVal(char symbol)
+// {
+// 	int bucket = computeSymbolIndex(symbol);
+// 	return symbols[bucket];
+// }
+
+// /* updates the value of a given symbol */
+// void updateSymbolVal(char symbol, int val)
+// {
+// 	int bucket = computeSymbolIndex(symbol);
+// 	symbols[bucket] = val;
+// }
+
+OPERATION_RETURN insert(int type, char* name, bool isConstant, Values value, Scope *currentTable)
 {
-	int bucket = computeSymbolIndex(symbol);
-	return symbols[bucket];
+
+    // first check for duplication
+    unordered_map<char *, Symbol>::iterator itr = currentTable->currentLockup.find(name);
+
+    if (itr == currentTable->currentLockup.end())
+    {
+        
+            Symbol*s = new Symbol();
+            s->type = type;
+            s->isConst = isConstant;
+            s->value = value;
+			pair <char*,Symbol> newP;
+			cout<<"HI";
+			newP=make_pair(name,*s);
+			currentTable->currentLockup.insert(newP);
+            //currentTable->currentLockup[name]=move(s);
+
+			Scope *Dum =  lookUp(name, currentTable);
+			itr = currentTable->currentLockup.find(name);
+			cout<<"HI";
+			cout<<"name:"<<name<<"value:"<<itr->second.value.Number<<endl;
+            return SUCCESSFUL_INSERTION;
+        
+    }
+	//TEST ONLY
+	
+    return DUPLICATE_INSERTION;
 }
 
-/* updates the value of a given symbol */
-void updateSymbolVal(char symbol, int val)
+Scope *lookUp(char *name, Scope *currentTable)
 {
-	int bucket = computeSymbolIndex(symbol);
-	symbols[bucket] = val;
+
+    // base case: not found in alllllll scopes: 2o7a
+    if (currentTable == NULL)
+        return NULL;
+
+    if (currentTable->currentLockup.find(name) == currentTable->currentLockup.end())
+    {
+        return lookUp(name, currentTable->above);
+    }
+    return currentTable;
 }
+
+OPERATION_RETURN update(char *name, int newType, Values value, Scope *currentTable)
+{
+
+    Scope *currTable = lookUp(name, currentTable);
+
+    if (currTable != NULL)
+    {
+        unordered_map<char *, Symbol>::iterator itr = currentTable->currentLockup.find(name); //madaam mesh b null yeb2a wesh la2ah
+        // check semantics errors:
+        if (itr->second.isConst)
+        {
+            return SEMANTIC_ERROR_ATTEMPT_CHANGING_CONSTANT;
+        }
+        if (newType == itr->second.type)
+        {
+            itr->second.value = value;
+            return SUCCESSFUL_UPDATE;
+        }
+        return SEMANTIC_ERROR_TYPE_INCOMPATIBLE;
+    }
+    return SYMBOL_NOT_FOUND;
+}
+
+Scope *createMainScope()
+{
+    Scope *mainScope = new Scope();
+    mainScope->above = NULL;
+    return mainScope;
+}
+
+
 
 int main (void) {
-	/* init symbol table */
-	int i;
-	for(i=0; i<52; i++) {
-		symbols[i] = 0;
-	}
+	
+	mainscope=createMainScope();
+	currentcope=mainscope;
 
+	cout<<currentcope;
 	return yyparse ( );
 }
 
@@ -297,4 +402,3 @@ void yyerror (char *s) { // open file in write mode, and add the error to it!
 	fprintf(f, "%s at line %d\n", s, yylineno);
 	fclose(f);
 } 
-
