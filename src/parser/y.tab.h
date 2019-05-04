@@ -68,12 +68,14 @@
      OR = 284,
      AND = 285,
      NOT = 286,
-     SHIFT_LEFT = 287,
-     SHIFT_RIGHT = 288,
-     GREATER_THAN_EQUAL = 289,
-     LESS_THAN_EQUAL = 290,
-     EQUAL_EQUAL = 291,
-     NOT_EQUAL = 292
+     EQUAL_SIGN = 287,
+     EXP_NOT = 288,
+     SHIFT_LEFT = 289,
+     SHIFT_RIGHT = 290,
+     GREATER_THAN_EQUAL = 291,
+     LESS_THAN_EQUAL = 292,
+     EQUAL_EQUAL = 293,
+     NOT_EQUAL = 294
    };
 #endif
 /* Tokens.  */
@@ -106,12 +108,14 @@
 #define OR 284
 #define AND 285
 #define NOT 286
-#define SHIFT_LEFT 287
-#define SHIFT_RIGHT 288
-#define GREATER_THAN_EQUAL 289
-#define LESS_THAN_EQUAL 290
-#define EQUAL_EQUAL 291
-#define NOT_EQUAL 292
+#define EQUAL_SIGN 287
+#define EXP_NOT 288
+#define SHIFT_LEFT 289
+#define SHIFT_RIGHT 290
+#define GREATER_THAN_EQUAL 291
+#define LESS_THAN_EQUAL 292
+#define EQUAL_EQUAL 293
+#define NOT_EQUAL 294
 
 
 
@@ -121,7 +125,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 26 "calc.y"
+#line 30 "calc.y"
 
 	long NUM; 
 	int BOOOL;
@@ -132,7 +136,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 136 "y.tab.h"
+#line 140 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

@@ -30,6 +30,8 @@ Bas                          {return SCOPE_END_TOKEN;}
 True                         {yylval.BOOOL = 1; return TrueFalse;}
 False                        {yylval.BOOOL = 2; return TrueFalse;}
 \|\|                         {return OR;}
+~                            {return EXP_NOT;}
+=                           {return EQUAL_SIGN;}
 &&                           {return AND;}
 !                            {return NOT;}
 \<\<                         {return SHIFT_LEFT;}
@@ -38,7 +40,7 @@ False                        {yylval.BOOOL = 2; return TrueFalse;}
 \<=                          {return LESS_THAN_EQUAL;}
 ==                           {return EQUAL_EQUAL;}
 !=                           {return NOT_EQUAL;}
-[_a-zA-Z][a-zA-Z0-9\._]*     {yylval.VARIABLE = yytext; return IDENTIFIER_TOKEN;}
+[_a-zA-Z][a-zA-Z0-9\._]+     {yylval.VARIABLE = yytext; return IDENTIFIER_TOKEN;}
 [0-9]+                       {yylval.NUM = atoi(yytext); return LONG_INTEGER;}
 [ \t\n]                      ;
 [\+\-*/%=()|&^<>]            {return yytext[0];}

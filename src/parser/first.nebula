@@ -1,9 +1,11 @@
-x = 4.2  + 2.0;
-x = true | 2;
-x = "yahi \" a";
-y= "; ''";
-x = x << 2;
-Law(x>2)E3ml
+Rakam x1;
+x5= 4.2  + 2.0;
+x1 = true | 2;
+x1 = "yahi \" a";
+y1= "; ''";
+x1 = x1 << 2;
+x1= x1+2;
+Law(x1>2)E3ml
 ;
 
 Bas

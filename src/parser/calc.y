@@ -5,6 +5,9 @@ int yylex();
 #include <stdio.h>     /* C declarations used in actions */
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
+#include <string>
+#include <ctype.h>
 #include <unordered_map>
 #include <utility>
 #include <typeinfo>
@@ -19,8 +22,9 @@ Scope *lookUp(char *name, Scope *currentTable);
 
 Scope* mainscope=NULL;
 Scope* currentcope=NULL;
-
-
+string variable;
+void StoreVarib(char*V);
+int x;
 %}
 
 %union {
@@ -79,10 +83,12 @@ Scope* currentcope=NULL;
 	%token DO_STATEMENT_TOKEN
 
 // Coding:
-	%token IDENTIFIER_TOKEN
+	%token <VARIABLE> IDENTIFIER_TOKEN
 	%token OR
 	%token AND
 	%token NOT
+	%token EQUAL_SIGN
+	%token EXP_NOT
 	%token SHIFT_LEFT
 	%token SHIFT_RIGHT
 	%token GREATER_THAN_EQUAL
@@ -97,7 +103,7 @@ Scope* currentcope=NULL;
 	%type <DOOBLE>  double_value_expAddSubtract double_value_term double_value_factor double_value_component
 	
 	%type <BOOOL>  Bexp Bexp1 Bexpand Bexpbracket // 0 or 1 integers.
-	%type <VARIABLE> string_value_assignment
+	%type <VARIABLE> string_value_assignment TEST_ID
 
 	// EDITTTTTTTTTTTTTTTTTTTT
 %%
@@ -127,7 +133,7 @@ line    : assignment STATEMENT_TERMINATOR_TOKEN			{printf("Matched assignment\n"
         ;
 		
 // Decalarations of variables and constants:
-declaration: data_type IDENTIFIER_TOKEN 							{;} // updateSymbolVal() } // TODO: update Symbol table
+declaration: data_type TEST_ID 							{ printf("ya rab %s\n", $2);} // updateSymbolVal() } // TODO: update Symbol table
 		| data_type assignment							 	  		{;}
 		| CONSTANT_TOKEN data_type assignment 						{;} // TODO: when it's a constant, mark it so you can not update it later on
 		;
@@ -138,14 +144,16 @@ data_type: Rakam 		{;}
 		| TOKEN_Harf 	{;}
 		| TOKEN_Hroof   {;}
 		;		
-
-assignment : IDENTIFIER_TOKEN '=' expbitwise { ;} // printf("ya rab %c\n", typeid($3).name()[0]);
-			| IDENTIFIER_TOKEN '=' double_value_expAddSubtract { Values val;
+TEST_ID: IDENTIFIER_TOKEN {$$=$1; variable=$$;printf("VARIABLE = %s\n", variable);cout<<"VARIABLE_COUT = "<<variable<<endl;}
+;
+assignment : TEST_ID  EQUAL_SIGN expbitwise { ;} // printf("ya rab %c\n", typeid($3).name()[0]);
+			| TEST_ID  EQUAL_SIGN double_value_expAddSubtract { Values val;
 				val.Number = $3;
-				insert(DOUBLE,"yahia",false,val, currentcope); printf("ya rab %c\n", typeid($3).name()[0]);} 
 				
-			| IDENTIFIER_TOKEN '=' Bexp1 { printf("ya rab %c\n", typeid($3).name()[0]);} // updateSymbolVal($1,$3); } // TODO: gowa el function law el variable msh mawgood, zawedo
-			| IDENTIFIER_TOKEN '=' string_value_assignment { printf("string is matched %s\n",$3);}
+				insert(DOUBLE,$1,false,val, currentcope); printf("ya rab %c\n", typeid($3).name()[0]);} 
+				
+			| TEST_ID  EQUAL_SIGN Bexp1 { printf("ya rab %c\n", typeid($3).name()[0]);} // updateSymbolVal($1,$3); } // TODO: gowa el function law el variable msh mawgood, zawedo
+			| TEST_ID  EQUAL_SIGN string_value_assignment { printf("string is matched %s\n",$3);}
 		;
 
 // print_stmt:  TOKEN_Harf Bexp1  {printf("%s\n",$2);}
@@ -158,21 +166,23 @@ string_value_assignment:  STRING_VALUE			{
 													$$ = $1;
 													printf("matched string value %s\n",$1); 
 												}		 //    $$ = symbolVal($1);
+				//| IDENTIFIER_TOKEN		{;} //    $$ = symbolVal($1);
+												
 						;
 
 // Flow Control Statements:
 
 // 1. If-else: // FIX
 
-if_statement: IF_STATEMENT_TOKEN '('Bexp')' SCOPE_START_TOKEN line SCOPE_END_TOKEN  	{;} // TODO: replace exp with Bexp
-		| if_statement ELSE_STATEMENT_TOKEN SCOPE_START_TOKEN line SCOPE_END_TOKEN 		{;}
+if_statement: IF_STATEMENT_TOKEN '('Bexp')' SCOPE_START_TOKEN{x=1;} line SCOPE_END_TOKEN  	{x=0;} // TODO: replace exp with Bexp
+		| if_statement ELSE_STATEMENT_TOKEN SCOPE_START_TOKEN {x=1;} line SCOPE_END_TOKEN 		{x=0;} 
 		;
 
 // 2. switch case:
-switch_statement: SWITCH_CASE_BEGINNING_TOKEN '('IDENTIFIER_TOKEN')' SWITCH_CASE_START_CASES_TOKEN ':' case_statement SWITCH_DEFAULT_CASE_BEGINNING_TOKEN line SWITCH_CASE_END_CASES_TOKEN {;}
+switch_statement: SWITCH_CASE_BEGINNING_TOKEN '('IDENTIFIER_TOKEN ')' SWITCH_CASE_START_CASES_TOKEN ':' case_statement SWITCH_DEFAULT_CASE_BEGINNING_TOKEN{x=1;} line SWITCH_CASE_END_CASES_TOKEN {x=0;} 
 		;
 
-case_statement: case_statement '('term')'  SCOPE_START_TOKEN line SCOPE_END_TOKEN | '('term')'  SCOPE_START_TOKEN line SCOPE_END_TOKEN 	{;}
+case_statement: case_statement '('term')'  SCOPE_START_TOKEN{x=1;}  line SCOPE_END_TOKEN {x=0;} | '('term')'  SCOPE_START_TOKEN{x=1;} line SCOPE_END_TOKEN {x=0;} 
 		;
 // 3. for loop:
 for_iterator: assignment 				{;}
@@ -180,14 +190,13 @@ for_iterator: assignment 				{;}
 		;
 
 			 
-for_statement: FOR_LOOP_STATMENT_TOKEN '('for_iterator STATEMENT_TERMINATOR_TOKEN Bexp1 STATEMENT_TERMINATOR_TOKEN assignment')' SCOPE_START_TOKEN line SCOPE_END_TOKEN     {;}
+for_statement: FOR_LOOP_STATMENT_TOKEN '('for_iterator STATEMENT_TERMINATOR_TOKEN Bexp1 STATEMENT_TERMINATOR_TOKEN assignment')' SCOPE_START_TOKEN{x=1;}  line SCOPE_END_TOKEN     {x=0;} 
 		;
 
 // 4. While: 
-while_statement: WHILE_LOOP_STATEMENT_TOKEN '('Bexp1')' SCOPE_START_TOKEN line SCOPE_END_TOKEN     			{;}
-		;
+while_statement: WHILE_LOOP_STATEMENT_TOKEN '('Bexp1')' SCOPE_START_TOKEN{x=1;} line SCOPE_END_TOKEN {x=0;}
 // 5. Do While:
-repeat_statement: DO_STATEMENT_TOKEN line WHILE_LOOP_STATEMENT_TOKEN '('Bexp1')' STATEMENT_TERMINATOR_TOKEN {;}
+repeat_statement: DO_STATEMENT_TOKEN{x=1;}  line WHILE_LOOP_STATEMENT_TOKEN '('Bexp1')' STATEMENT_TERMINATOR_TOKEN  {x=0;}
 				  ;
 
 expbitwise	: expbitwise '|' exp	 	    {$$ = $1 | $3;}
@@ -227,7 +236,7 @@ double_value_component   : double_value_component '*' double_value_factor       
 
 factor  : '(' expbitwise ')'            {$$ = $2;}
 	    | '-' factor             {$$ = -$2;}
-		| '~' factor             {$$ = ~$2;}
+		| EXP_NOT factor             {$$ = ~$2;}
 	    | term                   {$$ = $1;}
  		;
  
@@ -281,6 +290,9 @@ Bexpbracket  : '(' Bexp1 ')'            {$$ = $2;}
 
 %%                     /* C code */
 
+void StoreVarib(char*V){
+	variable = V;
+}
 // int computeSymbolIndex(char token)
 // {
 // 	int idx = -1;
@@ -327,13 +339,15 @@ OPERATION_RETURN insert(int type, char* name, bool isConstant, Values value, Sco
 
 			Scope *Dum =  lookUp(name, currentTable);
 			itr = currentTable->currentLockup.find(name);
-			cout<<"HI";
+			cout<<"HI inserted ... "<<name<<endl;
 			cout<<"name:"<<name<<"value:"<<itr->second.value.Number<<endl;
+			cout<<"DONE... "<<endl;
             return SUCCESSFUL_INSERTION;
         
     }
 	//TEST ONLY
 	
+	cout<<"FAILED"<<endl;
     return DUPLICATE_INSERTION;
 }
 
