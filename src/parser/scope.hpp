@@ -1,7 +1,7 @@
 #pragma once
 
 #include <unordered_map>
-
+#include"string"
 #define CHAR 1
 #define INT 2
 #define DOUBLE 3
@@ -36,7 +36,7 @@ struct Symbol
 
 struct Scope
 {
-    std::unordered_map<char *, Symbol> currentLockup;
+    std::unordered_map<char*, Symbol> currentLockup;
     Scope *above;
 };
 

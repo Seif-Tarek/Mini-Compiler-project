@@ -1,39 +1,6 @@
-0x3124b0VARIABLE = ÐðN
-VARIABLE_COUT = x1
-ya rab x1;
-Matched Declarations
-VARIABLE = ÐðN
-VARIABLE_COUT = x5=
-i matched double 4.200000
-i matched double 2.000000
-HIHI inserted ... x5= 4.2  + 2.0;
-name:x5= 4.2  + 2.0;value:6.2
-DONE... 
-ya rab d
+0x2ed9238VARIABLE_COUT = x2
+i matched integer 4 4
+i matched integer 3 3
 Matched assignment
-VARIABLE = ÐðN
-VARIABLE_COUT = x1 =
-i matched integer 2
-Matched assignment
-VARIABLE = ÐðN
-VARIABLE_COUT = x1 =
-matched string value "yahi \" a"
-string is matched "yahi \" a"
-Matched assignment
-VARIABLE = ÐðN
-VARIABLE_COUT = y1=
-matched string value "; ''"
-string is matched "; ''"
-Matched assignment
-VARIABLE = ÐðN
-VARIABLE_COUT = x1 =
-i matched integer 2
-Matched assignment
-VARIABLE = ÐðN
-VARIABLE_COUT = x1=
-i matched integer 2
-Matched assignment
-i matched integer 2
-Matched Empty statement
-Matched Empty statement
-Matched flow control: if
+i matched integer 0 0
+Matched loop: do-while

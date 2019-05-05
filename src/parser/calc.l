@@ -24,6 +24,7 @@ Yb2a                         {return SWITCH_CASE_START_CASES_TOKEN;}
 8ear_Kda                     {return SWITCH_DEFAULT_CASE_BEGINNING_TOKEN;}
 Lef_3ala                     {return FOR_LOOP_STATMENT_TOKEN;}
 Tool_Ma                      {return WHILE_LOOP_STATEMENT_TOKEN;}
+ToolMa                       {return WHILE_LOOP_STATEMENT_TOKEN_TEST;}
 E3mly                        {return DO_STATEMENT_TOKEN;}
 E3ml                         {return SCOPE_START_TOKEN;}
 Bas                          {return SCOPE_END_TOKEN;}
@@ -40,7 +41,7 @@ False                        {yylval.BOOOL = 2; return TrueFalse;}
 \<=                          {return LESS_THAN_EQUAL;}
 ==                           {return EQUAL_EQUAL;}
 !=                           {return NOT_EQUAL;}
-[_a-zA-Z][a-zA-Z0-9\._]+     {yylval.VARIABLE = yytext; return IDENTIFIER_TOKEN;}
+[_a-zA-Z][a-zA-Z0-9\._]*     {yylval.VARIABLE = yytext; return IDENTIFIER_TOKEN;}
 [0-9]+                       {yylval.NUM = atoi(yytext); return LONG_INTEGER;}
 [ \t\n]                      ;
 [\+\-*/%=()|&^<>]            {return yytext[0];}

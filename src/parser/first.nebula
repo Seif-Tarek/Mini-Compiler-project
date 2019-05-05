@@ -1,16 +1,3 @@
-Rakam x1;
-x5= 4.2  + 2.0;
-x1 = true | 2;
-x1 = "yahi \" a";
-y1= "; ''";
-x1 = x1 << 2;
-x1= x1+2;
-Law(x1>2)E3ml
-;
-
-Bas
-Aew E3ml
-;
-
-Bas
-
+E3mly
+x2=4+3;
+ToolMa(x1>0);
