@@ -1,0 +1,13 @@
+L1:
+cmp(x1 , 1) 
+JNE L2
+Store ( x1 , 0 )
+JMP L0
+L2:
+cmp(x1 , 2) 
+JNE L3
+Store ( x2 , 0 )
+JMP L0
+L3:
+Store ( x2 , 0 )
+L0:

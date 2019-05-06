@@ -1,6 +1,12 @@
-0x2ed9238VARIABLE_COUT = x2
-i matched integer 4 4
-i matched integer 3 3
-Matched assignment
+0x2ef9238i matched integer 1 1
+VARIABLE_COUT = x1
 i matched integer 0 0
-Matched loop: do-while
+Matched assignment
+i matched integer 2 2
+VARIABLE_COUT = x2
+i matched integer 0 0
+Matched assignment
+VARIABLE_COUT = x2
+i matched integer 0 0
+Matched assignment
+Matched flow control: switch

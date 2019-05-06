@@ -31,8 +31,9 @@ string temp_count="0";
 string flag_count="0";
 string temp="t";
 string flag="f";
+string switchVar="";
 int valueNumber=0;
-int type=0;
+int type=0,L1=0,L2=0;
 void store()
 {
 	ofstream myfile;
@@ -84,6 +85,36 @@ void codegen_minus()
 	myfile.close();
 }
 
+		void switch1(){
+			ofstream myfile;
+  			myfile.open ("Code_Generated.txt",ios::app);
+			myfile << "L"<<L1<<":\n";
+			myfile.close();
+		}
+		void switch2(){
+			ofstream myfile;
+  			myfile.open ("Code_Generated.txt",ios::app);
+			myfile << "JMP L"<<L1<<"\n";
+			myfile.close();
+		}
+		void switchMain(){
+			ofstream myfile;
+  			myfile.open ("Code_Generated.txt",ios::app);
+			myfile << "L"<<label_num<<":\n";
+			myfile << "cmp("<<switchVar<<" , "<<st1[top]<<") \n";
+			top--;
+			label_num++;
+			myfile << "JNE L"<<label_num<<"\n";
+			label[++ltop]=label_num;
+			myfile.close();
+		}
+		void switch_8ear_kda(){
+			ofstream myfile;
+  			myfile.open ("Code_Generated.txt",ios::app);
+			myfile << "L"<<label_num<<":\n";
+			label_num++;
+			myfile.close();
+		}
 		void for1(){
 			ofstream myfile;
   			myfile.open ("Code_Generated.txt",ios::app);
@@ -340,10 +371,11 @@ if_statement: IF_STATEMENT_TOKEN '('Bexp1')' SCOPE_START_TOKEN {if1();} line SCO
 		;
 
 // 2. switch case:
-switch_statement: SWITCH_CASE_BEGINNING_TOKEN '('IDENTIFIER_TOKEN ')' SWITCH_CASE_START_CASES_TOKEN  case_statement SWITCH_DEFAULT_CASE_BEGINNING_TOKEN{x=1;} line SWITCH_CASE_END_CASES_TOKEN {x=0;} 
+switch_statement: SWITCH_CASE_BEGINNING_TOKEN {L1=label_num; label_num++;}
+	'('IDENTIFIER_TOKEN {switchVar=$4;} ')' SWITCH_CASE_START_CASES_TOKEN  case_statement SWITCH_DEFAULT_CASE_BEGINNING_TOKEN{x=1;switch_8ear_kda();} line SWITCH_CASE_END_CASES_TOKEN {switch1();x=0;} 
 		;
 
-case_statement: case_statement '('term')'  SCOPE_START_TOKEN{x=1;}  line SCOPE_END_TOKEN {x=0;} | '('term')'  SCOPE_START_TOKEN{x=1;} line SCOPE_END_TOKEN {x=0;} 
+case_statement: case_statement '('term {st1[++top]=std::to_string($3);} ')' {switchMain();}  SCOPE_START_TOKEN{x=1;}  line {switch2();} SCOPE_END_TOKEN {x=0;} | '('term {st1[++top]=std::to_string($2);} ')' {switchMain();}  SCOPE_START_TOKEN{x=1;} line {switch2();} SCOPE_END_TOKEN {x=0;} 
 		;
 // 3. for loop:
 for_iterator: assignment 				{;}
@@ -355,7 +387,7 @@ for_statement: FOR_LOOP_STATMENT_TOKEN  '('for_iterator STATEMENT_TERMINATOR_TOK
 		;
 
 // 4. While: 
-while_statement: WHILE_LOOP_STATEMENT_TOKEN  {for1();}'(' Bexp1')'  SCOPE_START_TOKEN{x=1;for2();} line SCOPE_END_TOKEN {x=0;for(3);}
+while_statement: WHILE_LOOP_STATEMENT_TOKEN  {for1();}'(' Bexp1')'  SCOPE_START_TOKEN {x=1;for2();} line SCOPE_END_TOKEN {x=0;for3();}
 // 5. Do While:
 repeat_statement: {for1();} DO_STATEMENT_TOKEN  line WHILE_LOOP_STATEMENT_TOKEN_TEST  '('Bexp1')' STATEMENT_TERMINATOR_TOKEN  {for2();for3();}
 				  ;
@@ -577,7 +609,7 @@ Scope *createMainScope()
 
 
 int main (void) {
-	
+	const int result = remove("Code_Generated.txt");
 	mainscope=createMainScope();
 	currentcope=mainscope;
 
