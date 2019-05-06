@@ -1,12 +1,10 @@
-0x2ef9238i matched integer 1 1
-VARIABLE_COUT = x1
-i matched integer 0 0
-Matched assignment
-i matched integer 2 2
-VARIABLE_COUT = x2
-i matched integer 0 0
-Matched assignment
-VARIABLE_COUT = x2
-i matched integer 0 0
-Matched assignment
-Matched flow control: switch
+0x2f59238VARIABLE_COUT = x1
+i matched double 4.100000 
+4i matched double 3.200000 
+3l
+itr 0
+HIHI inserted ... x1
+name:x1value:7
+DONE... 
+Matched Declarations
+ x1 7 2

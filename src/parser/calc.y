@@ -285,9 +285,7 @@ void codegen_minus()
 // Utilities:
 
 	%type <VARIABLE> assignment  //Needs editing
-	%type <NUM> line exp expbitwise expAddSubtract term factor component
-	%type <DOOBLE>  double_value_expAddSubtract double_value_term double_value_factor double_value_component
-	
+	%type <NUM> line exp expbitwise expAddSubtract term factor component	
 	%type <BOOOL>  Bexp Bexp1 Bexpand Bexpbracket // 0 or 1 integers.
 	%type <VARIABLE> string_value_assignment TEST_ID
 
@@ -314,8 +312,6 @@ line    : assignment STATEMENT_TERMINATOR_TOKEN			{printf("Matched assignment\n"
 		| line exit_command STATEMENT_TERMINATOR_TOKEN	{printf("Matched fedahya\n");exit(EXIT_SUCCESS);}
 		| STATEMENT_TERMINATOR_TOKEN 					{printf("Matched Empty statement\n");}
 		| line expbitwise STATEMENT_TERMINATOR_TOKEN 	{printf("Matched Expression Statement\n");}
-		| line double_value_expAddSubtract STATEMENT_TERMINATOR_TOKEN 	{printf("Matched Expression Statement\n");}
-		| double_value_expAddSubtract STATEMENT_TERMINATOR_TOKEN					  	{printf("Matched Expression Statement\n");}
         ;
 		
 // Decalarations of variables and constants:
@@ -341,10 +337,8 @@ data_type: Rakam 		{;}
 		;		
 TEST_ID: IDENTIFIER_TOKEN {$$=$1; variable=$1;cout<<"VARIABLE_COUT = "<<variable<<endl;}
 ;
-assignment : TEST_ID  EQUAL_SIGN expbitwise {valueNumber=$3;type=2;store();}
-			| TEST_ID  EQUAL_SIGN double_value_expAddSubtract {valueNumber=$3;type=3;store();}
-				
-			| TEST_ID  EQUAL_SIGN Bexp1 { printf("ya rab %c\n", typeid($3).name()[0]);store();} // updateSymbolVal($1,$3); } // TODO: gowa el function law el variable msh mawgood, zawedo
+assignment : TEST_ID  EQUAL_SIGN expbitwise {valueNumber=$3;type=2;store();cout<<typeid($3).name();}				
+			| TEST_ID  EQUAL_SIGN Bexp1 { cout<<typeid($3).name();store();} // updateSymbolVal($1,$3); } // TODO: gowa el function law el variable msh mawgood, zawedo
 			| TEST_ID  EQUAL_SIGN string_value_assignment { printf("string is matched %s\n",$3);store();}
 		;
 
@@ -403,29 +397,18 @@ exp    	: expAddSubtract                		  {$$ = $1;}
        	| exp SHIFT_RIGHT {st1[++top]="SHIFT_RIGHT";} expAddSubtract          {$$ = $1 >> $4;codegen();}
        	;
 
-// double_value_exp    	: double_value_expAddSubtract                		  {;}
-//        	| double_value_exp  double_value_expAddSubtract           {;}
-//        	;
 
 expAddSubtract  : component                  {$$ = $1;}
 			    | expAddSubtract '+' {st1[++top]="ADD";} component          {$$ = $1 + $4;codegen();}
 				| expAddSubtract '-' {st1[++top]="SUB";} component          {$$ = $1 - $4;codegen();}
 				;
 
-double_value_expAddSubtract  :  double_value_expAddSubtract '+' {st1[++top]="ADD";printf("%s\n",st1[top].c_str());} double_value_component          {$$ = $1 + $4;codegen(); }
-				| double_value_expAddSubtract '-' {st1[++top]="SUB";}	double_value_component          {$$ = $1 - $4;codegen();}
-				| double_value_component                  {$$ = $1;}
-				;
 
 component   : component '*' {st1[++top]="MUL";} factor       {$$ = $1 * $4;codegen();}
  			| component '/' {st1[++top]="DIV";} factor       {$$ = $1 / $4;codegen();}
 	    	| factor                     {$$ = $1;}
 	    	;
 
-double_value_component   : double_value_component '*' {st1[++top]="MUL";} double_value_factor       {$$ = $1 * $4;codegen();}
- 			| double_value_component '/' {st1[++top]="DIV";}double_value_factor       {$$ = $1 / $4;codegen();}
-	    	| double_value_factor                     {$$ = $1;}
-	    	;
 
 factor  : '(' expbitwise ')'            {$$ = $2;}
 	    | '-' factor             {$$ = -$2;st1[++top]="NEG";codegen_minus();}
@@ -433,14 +416,10 @@ factor  : '(' expbitwise ')'            {$$ = $2;}
 	    | term                   {$$ = $1;}
  		;
  
-double_value_factor  : '(' double_value_expAddSubtract ')'		{$$ = $2;}
-	    | double_value_term                   		{$$ = $1;}
-		| '-' double_value_factor       			    {$$ = -$2;st1[++top]="NEG";codegen_minus();}
-		;
-		
 term   	: LONG_INTEGER          {$$ = $1; st1[++top]=std::to_string($1); printf("i matched integer %d %s\n",$1,st1[top].c_str());}
 		| CHARACTER_VALUE		{$$ = $1;  printf("i matched TTT %d\n",$1);}
 		| TrueFalse				{$$ = $1;}
+		| DOUBE_FLOATING_POINT 	{$$ = $1; st1[++top]=std::to_string($1); printf("i matched double %f \n",$1);}
 		| IDENTIFIER_TOKEN		{st1[++top]=$1;}
 		
 		// if the matched identifier refers to String type:
@@ -449,9 +428,6 @@ term   	: LONG_INTEGER          {$$ = $1; st1[++top]=std::to_string($1); printf(
 		
         ;
 
-double_value_term: DOUBE_FLOATING_POINT 	{$$ = $1; st1[++top]=std::to_string($1); printf("i matched double %f \n",$1);}
-				 //| IDENTIFIER_TOKEN		{st1[++top]=$1;}
-		;
 
 // Afsel 3shan al precedance.
 Bexp	: exp '>'					 {st1[++top]="GreaterThan";}             exp		{$$ = $1 > $4;setFlag();}
@@ -460,12 +436,6 @@ Bexp	: exp '>'					 {st1[++top]="GreaterThan";}             exp		{$$ = $1 > $4;s
 		| exp LESS_THAN_EQUAL 	     {st1[++top]="SmallerThanOrEqual";}	     exp        {$$ = $1 <= $4;setFlag();}
 		| exp EQUAL_EQUAL 	      	 {st1[++top]="EQUAL";}	                 exp        {$$ = $1 == $4;setFlag();}
 		| exp NOT_EQUAL 			 {st1[++top]="NotEQUAL";}                exp    	{$$ = $1 != $4;setFlag();}
-		| double_value_expAddSubtract '>' 					 {st1[++top]="GreaterThan";}         double_value_expAddSubtract	{$$ = $1 > $4;setFlag();}
- 		| double_value_expAddSubtract  GREATER_THAN_EQUAL    {st1[++top]="GreaterThanOrEqual";}  double_value_expAddSubtract	{$$ = $1 >= $4;setFlag();}
-	    | double_value_expAddSubtract '<' 					 {st1[++top]="SmallerThan";} 		 double_value_expAddSubtract	{$$ = $1 < $4;setFlag();}
-		| double_value_expAddSubtract LESS_THAN_EQUAL		 {st1[++top]="SmallerThanOrEqual";}	 double_value_expAddSubtract	{$$ = $1 <= $4;setFlag();}
-		| double_value_expAddSubtract EQUAL_EQUAL			 {st1[++top]="EQUAL";} 				 double_value_expAddSubtract	{$$ = $1 == $4;setFlag();}
-		| double_value_expAddSubtract NOT_EQUAL 			 {st1[++top]="NotEQUAL";} 			 double_value_expAddSubtract	{$$ = $1 != $4;setFlag();}
 		;
 
 Bexp1	: Bexp1 OR     {st1[++top]="OR";}  Bexpand					{$$ = $1 || $4;setFlag();}
@@ -514,7 +484,7 @@ void printSymbolTable(Scope *currentTable)
 {
 	for ( auto it = currentTable->currentLockup.begin(); it != currentTable->currentLockup.end(); ++it )
 		{
-			std::cout << " " << it->first<<" "<<it->second.value.Number<<"\n";
+			std::cout << " " << it->first<<" "<<it->second.value.Number<<" "<<it->second.type<<"\n";
 			//printf("%d\n",it->second.value.Number);
 		}
 }
