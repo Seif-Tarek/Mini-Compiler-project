@@ -64,16 +64,19 @@
      FOR_LOOP_STATMENT_TOKEN = 280,
      WHILE_LOOP_STATEMENT_TOKEN = 281,
      DO_STATEMENT_TOKEN = 282,
-     IDENTIFIER_TOKEN = 283,
-     OR = 284,
-     AND = 285,
-     NOT = 286,
-     SHIFT_LEFT = 287,
-     SHIFT_RIGHT = 288,
-     GREATER_THAN_EQUAL = 289,
-     LESS_THAN_EQUAL = 290,
-     EQUAL_EQUAL = 291,
-     NOT_EQUAL = 292
+     WHILE_LOOP_STATEMENT_TOKEN_TEST = 283,
+     IDENTIFIER_TOKEN = 284,
+     OR = 285,
+     AND = 286,
+     NOT = 287,
+     EQUAL_SIGN = 288,
+     EXP_NOT = 289,
+     SHIFT_LEFT = 290,
+     SHIFT_RIGHT = 291,
+     GREATER_THAN_EQUAL = 292,
+     LESS_THAN_EQUAL = 293,
+     EQUAL_EQUAL = 294,
+     NOT_EQUAL = 295
    };
 #endif
 /* Tokens.  */
@@ -102,16 +105,19 @@
 #define FOR_LOOP_STATMENT_TOKEN 280
 #define WHILE_LOOP_STATEMENT_TOKEN 281
 #define DO_STATEMENT_TOKEN 282
-#define IDENTIFIER_TOKEN 283
-#define OR 284
-#define AND 285
-#define NOT 286
-#define SHIFT_LEFT 287
-#define SHIFT_RIGHT 288
-#define GREATER_THAN_EQUAL 289
-#define LESS_THAN_EQUAL 290
-#define EQUAL_EQUAL 291
-#define NOT_EQUAL 292
+#define WHILE_LOOP_STATEMENT_TOKEN_TEST 283
+#define IDENTIFIER_TOKEN 284
+#define OR 285
+#define AND 286
+#define NOT 287
+#define EQUAL_SIGN 288
+#define EXP_NOT 289
+#define SHIFT_LEFT 290
+#define SHIFT_RIGHT 291
+#define GREATER_THAN_EQUAL 292
+#define LESS_THAN_EQUAL 293
+#define EQUAL_EQUAL 294
+#define NOT_EQUAL 295
 
 
 
@@ -121,7 +127,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 26 "calc.y"
+#line 214 ".\\calc.y"
 
 	long NUM; 
 	int BOOOL;
@@ -132,7 +138,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 136 "y.tab.h"
+#line 142 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
