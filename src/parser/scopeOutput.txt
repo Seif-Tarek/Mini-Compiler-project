@@ -1,0 +1,16 @@
+
+#######Scope Number 2
+x2 No3o: Rekam  yesawy: 9 mota3'ayer
+
+
+#######Scope Number 2
+s2 No3o: 3ashry  yesawy: 0.500000 mota3'ayer
+
+
+#######Scope Number 1
+s No3o: 7arf  yesawy: 's' mota3'ayer
+
+
+#######Scope Number 0
+z No3o: 7arf  yesawy: 'c' mota3'ayer
+d No3o: 7arf  yesawy: 'c' sabet

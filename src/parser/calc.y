@@ -14,6 +14,10 @@ int yylex();
 #include <typeinfo>
 
 #include "scope.hpp"
+
+extern int yylineno;
+int scope=0;	
+
 using namespace std;
 OPERATION_RETURN insert(int type, char* name, bool isConstant, Values value, Scope *currentTable);
 Scope *lookUp(char *name, Scope *currentTable);
@@ -31,9 +35,82 @@ string temp_count="0";
 string flag_count="0";
 string temp="t";
 string flag="f";
+bool declare=false;
 string switchVar="";
-int valueNumber=0;
+double valueNumber=0.0;
 int type=0,L1=0,L2=0;
+int tybe_right,tybe_left=6;
+
+void printToFile(const char* fileName, string message){
+	ofstream myfile;
+  			myfile.open (fileName,ios::app);
+			myfile <<message<<std::endl;
+			myfile.close();
+}
+
+void printSymbolTable(Scope *currentTable)
+{
+	string message="\n#######Scope Number " + std::to_string(scope) + "\n";
+	for ( auto it = currentTable->currentLockup.begin(); it != currentTable->currentLockup.end(); ++it )
+		{
+			message +=  it->first;
+			int temptype = it->second.type ;
+			string shit;
+			string str;
+
+			switch(temptype){
+				case 1 : message += " No3o: 7arf ";
+								shit = " ";
+								shit[0] =  (char)it->second.value.Number;
+								message += " yesawy: '"+shit+"' ";
+								break;
+				case 2 : message += " No3o: Rekam ";
+								message += " yesawy: "+std::to_string((int)it->second.value.Number)+" ";
+				 				break;
+				case 3 : message += " No3o: 3ashry "; 
+								message += " yesawy: "+std::to_string(it->second.value.Number)+" ";
+								break;
+				case 4 : message += " No3o: kelma ";
+							    str = it->second.value.Str;
+								message += " yesawy: "+str + " ";
+								break;	
+				case 5 : message += " No3o: sa7 w 3'alat ";
+								str = (it->second.value.Number==1)?"Sa7":"3'alat";
+								message += " yesawy: "+ str + " ";
+								break;	
+				default: message += " 2o7a msh 3aref el noo3 "; 
+			}
+
+			message += (it->second.isConst)?"sabet":"mota3'ayer\n";
+
+			//printf("%d\n",it->second.value.Number);
+		}
+		printToFile("scopeOutput.txt",message);
+
+}
+
+void openScope(){
+	Scope* newScope = new Scope();
+	newScope->above=currentcope;
+	currentcope=newScope;
+	++scope;
+}
+
+void closeScope(){
+
+	printSymbolTable(currentcope);
+
+	if(currentcope == NULL){
+		std::cout<<"WHAT THE FUCK\n";
+		return;
+	}
+	Scope* temporary = currentcope->above;
+	delete currentcope;
+	currentcope=temporary;
+	--scope;
+}
+
+
 void store()
 {
 	ofstream myfile;
@@ -41,6 +118,7 @@ void store()
     myfile << "Store" << " ( "<<variable<<" , "<<st1[top]<<" )"<< "\n";
 	myfile.close();
 }
+
 void codegen()
 {
 	ofstream myfile;
@@ -285,7 +363,8 @@ void codegen_minus()
 // Utilities:
 
 	%type <VARIABLE> assignment  //Needs editing
-	%type <NUM> line exp expbitwise expAddSubtract term factor component	
+	%type <DOOBLE> line expbitwise 	
+	%type <DOOBLE> exp expAddSubtract term factor component	
 	%type <BOOOL>  Bexp Bexp1 Bexpand Bexpbracket // 0 or 1 integers.
 	%type <VARIABLE> string_value_assignment TEST_ID
 
@@ -315,10 +394,12 @@ line    : assignment STATEMENT_TERMINATOR_TOKEN			{printf("Matched assignment\n"
         ;
 		
 // Decalarations of variables and constants:
-declaration: data_type TEST_ID 							{ printf("ya rab %s\n", $2);} // updateSymbolVal() } // TODO: update Symbol table
-		| data_type assignment							 	  		
-		 { Values val;
-				val.Number = valueNumber;
+declaration: data_type TEST_ID 							
+			{  declare=false;
+				Values val;
+				val.Char=' ';
+				val.Str=" ";
+				val.Number = 0;
 				char * c = new char[variable.size() + 1];
 				std::copy(variable.begin(), variable.end(), c);
 				if(c[variable.size()-1]=='=')
@@ -326,19 +407,48 @@ declaration: data_type TEST_ID 							{ printf("ya rab %s\n", $2);} // updateSym
 				c[variable.size()] = '\0'; // don't forget the terminating 0
 
 				insert(type,c,false,val, currentcope);}
-		| CONSTANT_TOKEN data_type assignment 						{;} // TODO: when it's a constant, mark it so you can not update it later on
-		;
+		|  data_type assignment							 	  		
+		 { Values val;cout<<"\nHNAAAAAAAAAAAAAA";
+				val.Number = valueNumber;
+				// TODO: insert Value Depending on type andrew.
+				char * c = new char[variable.size() + 1];
+				std::copy(variable.begin(), variable.end(), c);
+				if(c[variable.size()-1]=='=')
+					c[variable.size()-1] = '\0';
+				c[variable.size()] = '\0'; // don't forget the terminating 0
+
+				insert(type,c,false,val, currentcope);}
+		| CONSTANT_TOKEN data_type assignment 					
+		 { Values val;cout<<"\nHNAAAAAAAAAAAAAA";
+				val.Number = valueNumber;
+				// TODO: insert Value Depending on type andrew.
+				char * c = new char[variable.size() + 1];
+				std::copy(variable.begin(), variable.end(), c);
+				if(c[variable.size()-1]=='=')
+					c[variable.size()-1] = '\0';
+				c[variable.size()] = '\0'; // don't forget the terminating 0
+
+				insert(type,c,true,val, currentcope);}	;
 		
-data_type: Rakam 		{;} 
-		| TOKEN_3ashry 	{;}
-		| TOKEN_Boolean {;}
-		| TOKEN_Harf 	{;}
-		| TOKEN_Hroof   {;}
+data_type: Rakam 		{declare = true;type=2;cout<<"Rakam:"<<declare;} 
+		| TOKEN_3ashry 	{declare = true;type=3;cout<<"3ashry:"<<declare;}
+		| TOKEN_Boolean {declare = true;type=5;cout<<"bool:"<<declare;}
+		| TOKEN_Harf 	{declare = true;type=1;cout<<"harf:"<<declare;}
+		| TOKEN_Hroof   {declare = true;type=4;cout<<"hroof:"<<declare;}
 		;		
 TEST_ID: IDENTIFIER_TOKEN {$$=$1; variable=$1;cout<<"VARIABLE_COUT = "<<variable<<endl;}
 ;
-assignment : TEST_ID  EQUAL_SIGN expbitwise {valueNumber=$3;type=2;store();cout<<typeid($3).name();}				
-			| TEST_ID  EQUAL_SIGN Bexp1 { cout<<typeid($3).name();store();} // updateSymbolVal($1,$3); } // TODO: gowa el function law el variable msh mawgood, zawedo
+assignment : TEST_ID  EQUAL_SIGN expbitwise {valueNumber=$3;store();cout<<typeid($3).name();tybe_left=6;
+			if(!declare)
+				cout<<"\nD:"<<declare;
+				// TODO: Update Symbol Table Here Andrew.
+			else 
+			{
+				cout<<"\nD:"<<declare;
+				declare=false;
+			}
+}				
+			| TEST_ID  EQUAL_SIGN Bexp1 { cout<<"\nbool value : "<<$3;store();} // updateSymbolVal($1,$3); } // TODO: gowa el function law el variable msh mawgood, zawedo
 			| TEST_ID  EQUAL_SIGN string_value_assignment { printf("string is matched %s\n",$3);store();}
 		;
 
@@ -360,8 +470,8 @@ string_value_assignment:  STRING_VALUE			{
 
 // 1. If-else: // FIX
 
-if_statement: IF_STATEMENT_TOKEN '('Bexp1')' SCOPE_START_TOKEN {if1();} line SCOPE_END_TOKEN {if2();}  	{;} // TODO: replace exp with Bexp
-		| if_statement ELSE_STATEMENT_TOKEN{if3();} SCOPE_START_TOKEN line SCOPE_END_TOKEN {if2();}		{;}
+if_statement: IF_STATEMENT_TOKEN '('Bexp1')' SCOPE_START_TOKEN {if1(); openScope();} line SCOPE_END_TOKEN {if2(); closeScope(); cout<<"hereSAlemmmmmmm\n"; }  	 // TODO: replace exp with Bexp
+		| if_statement ELSE_STATEMENT_TOKEN{if3(); openScope(); } SCOPE_START_TOKEN line SCOPE_END_TOKEN {if2(); closeScope();cout<<"hereSAlemmmmmmm\n";}		
 		;
 
 // 2. switch case:
@@ -386,15 +496,49 @@ while_statement: WHILE_LOOP_STATEMENT_TOKEN  {for1();}'(' Bexp1')'  SCOPE_START_
 repeat_statement: {for1();} DO_STATEMENT_TOKEN  line WHILE_LOOP_STATEMENT_TOKEN_TEST  '('Bexp1')' STATEMENT_TERMINATOR_TOKEN  {for2();for3();}
 				  ;
 
-expbitwise	: expbitwise '|'  {st1[++top]="BitOR";}  exp	 	    {$$ = $1 | $4;codegen();}
-			| expbitwise '&'  {st1[++top]="BitAND";} exp    	    {$$ = $1 & $4;codegen();}
- 			| expbitwise '^'  {st1[++top]="XOR";}    exp	            {$$ = $1 ^ $4;codegen();}
+expbitwise	: expbitwise '|'  {st1[++top]="BitOR";}  exp	 	    {
+																		$$ = (int)$1 | (int)$4;codegen();		
+																		if(tybe_left!=2)
+																		{
+																			
+																			string message = "type invalid: yasta maysa7esh t7ot 'bitwise OR' ma3 double!!! at line ";
+																			message += std::to_string(yylineno);
+																			printToFile("semanticsAnalysis.txt",message);
+																			exit(0);
+																		}
+																	}
+			| expbitwise '&'  {st1[++top]="BitAND";} exp    	    {$$ = (int)$1 & (int)$4;codegen();	
+																		if(tybe_left!=2){
+																			string message = "type invalid: yasta maysa7esh t7ot 'bitwise AND' ma3 double!!! at line ";
+																			message += std::to_string(yylineno);
+																			printToFile("semanticsAnalysis.txt",message);
+																		exit(0);
+																		}}
+ 			| expbitwise '^'  {st1[++top]="XOR";}    exp	            {$$ = (int)$1 ^ (int)$4;codegen();	
+																		if(tybe_left!=2){
+																			string message = "type invalid: yasta maysa7esh t7ot 'bitwise XOR' ma3 double!!! at line ";
+																			message += std::to_string(yylineno);
+																			printToFile("semanticsAnalysis.txt",message);																		exit(0);
+																		}}
 	    	| exp        	            	{$$ = $1;}
 	    	;
 
 exp    	: expAddSubtract                		  {$$ = $1;}
-       	| exp SHIFT_LEFT  {st1[++top]="SHIFT_LEFT";}  expAddSubtract           {$$ = $1 << $4;codegen();}
-       	| exp SHIFT_RIGHT {st1[++top]="SHIFT_RIGHT";} expAddSubtract          {$$ = $1 >> $4;codegen();}
+       	| exp SHIFT_LEFT  {st1[++top]="SHIFT_LEFT";}  expAddSubtract           {$$ = (int)$1 << (int)$4;codegen();	
+																		if(tybe_left!=2){
+																			string message = "type invalid: yasta maysa7esh t7ot 'bitwise SHIFT LEFT' ma3 double!!! at line ";
+																			message += std::to_string(yylineno);
+																			printToFile("semanticsAnalysis.txt",message);																		exit(0);
+																		}
+																		
+																		}
+       	| exp SHIFT_RIGHT {st1[++top]="SHIFT_RIGHT";} expAddSubtract          {$$ = (int)$1 >> (int)$4;codegen();	
+																		if(tybe_left!=2){
+																			string message = "type invalid: yasta maysa7esh t7ot 'bitwise SHIFT RIGHT' ma3 double!!! at line ";
+																			message += std::to_string(yylineno);
+																			printToFile("semanticsAnalysis.txt",message);		
+																			exit(0);
+																		}}
        	;
 
 
@@ -412,15 +556,44 @@ component   : component '*' {st1[++top]="MUL";} factor       {$$ = $1 * $4;codeg
 
 factor  : '(' expbitwise ')'            {$$ = $2;}
 	    | '-' factor             {$$ = -$2;st1[++top]="NEG";codegen_minus();}
-		| EXP_NOT factor             {$$ = ~$2;st1[++top]="BitNOT";codegen_minus();}
+		| EXP_NOT factor             {$$ = ~(int)$2;st1[++top]="BitNOT";codegen_minus();}
 	    | term                   {$$ = $1;}
  		;
  
-term   	: LONG_INTEGER          {$$ = $1; st1[++top]=std::to_string($1); printf("i matched integer %d %s\n",$1,st1[top].c_str());}
-		| CHARACTER_VALUE		{$$ = $1;  printf("i matched TTT %d\n",$1);}
-		| TrueFalse				{$$ = $1;}
-		| DOUBE_FLOATING_POINT 	{$$ = $1; st1[++top]=std::to_string($1); printf("i matched double %f \n",$1);}
-		| IDENTIFIER_TOKEN		{st1[++top]=$1;}
+term   	: LONG_INTEGER          {$$ = $1; st1[++top]=std::to_string($1); printf("i matched integer %d %s\n",$1,st1[top].c_str());
+								if(tybe_left>5)
+									tybe_left=2;
+								else{
+									if(tybe_left!=2){
+										string message = "type invalid: yasta maysa7esh t7ot anwa3 mo5talefa ma3 ba3d, 3eib kedza!!! at line ";
+										message += std::to_string(yylineno);
+										printToFile("semanticsAnalysis.txt",message);
+										exit(0);
+									}
+								}}
+		| CHARACTER_VALUE		{   $$ = $1; st1[++top]=std::to_string($1); printf("i matched char %d %s\n",$1,st1[top].c_str());
+								if(tybe_left>5)
+									tybe_left=2;
+								else{
+									if(tybe_left!=2){
+										string message = "type invalid: yasta maysa7esh t7ot anwa3 mo5talefa ma3 ba3d, 3eib kedza!!! at line ";
+										message += std::to_string(yylineno);
+										printToFile("semanticsAnalysis.txt",message);
+										exit(0);
+									}
+								}}
+		| DOUBE_FLOATING_POINT 	{$$ = $1; st1[++top]=std::to_string($1); printf("i matched double %f \n",$1);
+								if(tybe_left>5)
+									tybe_left=3;
+								else{
+									if(tybe_left!=3){
+string message = "type invalid: yasta maysa7esh t7ot anwa3 mo5talefa ma3 ba3d, 3eib kedza!!! at line ";
+										message += std::to_string(yylineno);
+										printToFile("semanticsAnalysis.txt",message);
+																				exit(0);
+									}
+								}}
+		| IDENTIFIER_TOKEN		{     st1[++top]=$1;}
 		
 		// if the matched identifier refers to String type:
 			// return the address of this string as a long, pass it to the one we assign it to
@@ -430,12 +603,13 @@ term   	: LONG_INTEGER          {$$ = $1; st1[++top]=std::to_string($1); printf(
 
 
 // Afsel 3shan al precedance.
-Bexp	: exp '>'					 {st1[++top]="GreaterThan";}             exp		{$$ = $1 > $4;setFlag();}
- 		| exp GREATER_THAN_EQUAL	 {st1[++top]="GreaterThanOrEqual";}      exp	    {$$ = $1 >= $4;setFlag();}
-	    | exp '<' 				     {st1[++top]="SmallerThan";}	         exp        {$$ = $1 < $4;setFlag();}
-		| exp LESS_THAN_EQUAL 	     {st1[++top]="SmallerThanOrEqual";}	     exp        {$$ = $1 <= $4;setFlag();}
-		| exp EQUAL_EQUAL 	      	 {st1[++top]="EQUAL";}	                 exp        {$$ = $1 == $4;setFlag();}
-		| exp NOT_EQUAL 			 {st1[++top]="NotEQUAL";}                exp    	{$$ = $1 != $4;setFlag();}
+Bexp	: expbitwise '>'					 {st1[++top]="GreaterThan";}             expbitwise		{$$ = $1 > $4;setFlag();tybe_left=6;}
+ 		| expbitwise GREATER_THAN_EQUAL	 {st1[++top]="GreaterThanOrEqual";}      expbitwise	    {$$ = $1 >= $4;setFlag();tybe_left=6;}
+	    | expbitwise '<' 				     {st1[++top]="SmallerThan";}	         expbitwise        {$$ = $1 < $4;setFlag();tybe_left=6;}
+		| expbitwise LESS_THAN_EQUAL 	     {st1[++top]="SmallerThanOrEqual";}	     expbitwise        {$$ = $1 <= $4;setFlag();tybe_left=6;}
+		| expbitwise EQUAL_EQUAL 	      	 {st1[++top]="EQUAL";}	                 expbitwise        {$$ = $1 == $4;setFlag();tybe_left=6;}
+		| expbitwise NOT_EQUAL 			 {st1[++top]="NotEQUAL";}                expbitwise    	{$$ = $1 != $4;setFlag();tybe_left=6;}
+		| TrueFalse		     		{$$ = $1;}
 		;
 
 Bexp1	: Bexp1 OR     {st1[++top]="OR";}  Bexpand					{$$ = $1 || $4;setFlag();}
@@ -456,38 +630,8 @@ Bexpbracket  : '(' Bexp1 ')'            {$$ = $2;}
 void StoreVarib(char*V){
 	variable = V;
 }
-// int computeSymbolIndex(char token)
-// {
-// 	int idx = -1;
-// 	if(islower(token)) {
-// 		idx = token - 'a' + 26;
-// 	} else if(isupper(token)) {
-// 		idx = token - 'A';
-// 	}
-// 	return idx;
-// } 
 
-// /* returns the value of a given symbol */
-// int symbolVal(char symbol)
-// {
-// 	int bucket = computeSymbolIndex(symbol);
-// 	return symbols[bucket];
-// }
 
-// /* updates the value of a given symbol */
-// void updateSymbolVal(char symbol, int val)
-// {
-// 	int bucket = computeSymbolIndex(symbol);
-// 	symbols[bucket] = val;
-// }
-void printSymbolTable(Scope *currentTable)
-{
-	for ( auto it = currentTable->currentLockup.begin(); it != currentTable->currentLockup.end(); ++it )
-		{
-			std::cout << " " << it->first<<" "<<it->second.value.Number<<" "<<it->second.type<<"\n";
-			//printf("%d\n",it->second.value.Number);
-		}
-}
 bool finn(Scope *currentTable,char* c)
 {
 	for ( auto it = currentTable->currentLockup.begin(); it != currentTable->currentLockup.end(); ++it )
@@ -497,12 +641,12 @@ bool finn(Scope *currentTable,char* c)
 		}
 	return false;
 }
+
 OPERATION_RETURN insert(int type, char* name, bool isConstant, Values value, Scope *currentTable)
 {
 
+	extern int yylineno;
     // first check for duplication
-    unordered_map<char *, Symbol>::iterator itr = currentTable->currentLockup.find(name);
-	printf("\nitr %d\n",itr);
 
     if (!finn(currentTable,name))
     {
@@ -515,12 +659,8 @@ OPERATION_RETURN insert(int type, char* name, bool isConstant, Values value, Sco
 			cout<<"HI";
 			newP=make_pair(name,*s);
 			currentTable->currentLockup.insert(newP);
-            //currentTable->currentLockup[name]=move(s);
-    		 itr = currentTable->currentLockup.find(name);
 
-			//Scope *Dum =  lookUp(name, currentTable);
 			cout<<"HI inserted ... "<<name<<endl;
-			cout<<"name:"<<name<<"value:"<<itr->second.value.Number<<endl;
 			cout<<"DONE... "<<endl;
             return SUCCESSFUL_INSERTION;
         
@@ -529,6 +669,11 @@ OPERATION_RETURN insert(int type, char* name, bool isConstant, Values value, Sco
 	//TEST ONLY
 	
 	cout<<"FAILED"<<endl;
+	std::string strName = name;
+	std::string message = "duplicate insertion of " + strName + " at line ";
+	string number = std::to_string(yylineno);
+	message += number;
+	printToFile("semanticsAnalysis.txt",message);
     return DUPLICATE_INSERTION;
 }
 
@@ -576,6 +721,15 @@ Scope *createMainScope()
     return mainScope;
 }
 
+int getSymbolType(char*name, Scope* currentTable){
+
+if(currentTable==NULL) {
+	return -1;
+}
+
+
+
+}
 
 
 int main (void) {
@@ -589,6 +743,8 @@ int main (void) {
 	return 0;
 }
 
+
+
 void yyerror (char *s) { // open file in write mode, and add the error to it!
 	extern int yylineno;
 	FILE* f;
@@ -596,3 +752,5 @@ void yyerror (char *s) { // open file in write mode, and add the error to it!
 	fprintf(f, "%s at line %d\n", s, yylineno);
 	fclose(f);
 } 
+
+

@@ -29,7 +29,7 @@ E3mly                        {return DO_STATEMENT_TOKEN;}
 E3ml                         {return SCOPE_START_TOKEN;}
 Bas                          {return SCOPE_END_TOKEN;}
 True                         {yylval.BOOOL = 1; return TrueFalse;}
-False                        {yylval.BOOOL = 2; return TrueFalse;}
+False                        {yylval.BOOOL = 0; return TrueFalse;}
 \|\|                         {return OR;}
 ~                            {return EXP_NOT;}
 =                           {return EQUAL_SIGN;}

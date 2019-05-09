@@ -1,2 +1,16 @@
-ADD ( t0 , 4.100000 , 3.200000 )
-Store ( x1 , t0 )
+Store ( d , 99 )
+Store ( z , 99 )
+GreaterThan ( f0 , x , 2 )
+cmp(f0,0) 
+JE L1
+Store ( s , 115 )
+SmallerThan ( f1 , x , 4 )
+cmp(f1,0) 
+JE L2
+Store ( x2 , 9 )
+L2:
+cmp(f1,0) 
+JNE L3
+Store ( s2 , 0.500000 )
+L3:
+L1:

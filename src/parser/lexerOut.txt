@@ -1,10 +1,42 @@
-0x2f59238VARIABLE_COUT = x1
-i matched double 4.100000 
-4i matched double 3.200000 
-3l
-itr 0
-HIHI inserted ... x1
-name:x1value:7
+0x2e81980harf:1VARIABLE_COUT = d
+i matched char 99 99
+d
+D:1
+HNAAAAAAAAAAAAAAHIHI inserted ... d
 DONE... 
 Matched Declarations
- x1 7 2
+harf:1VARIABLE_COUT = z
+i matched char 99 99
+d
+D:1
+HNAAAAAAAAAAAAAAHIHI inserted ... z
+DONE... 
+Matched Declarations
+i matched integer 2 2
+harf:1VARIABLE_COUT = s
+i matched char 115 115
+d
+D:1
+HNAAAAAAAAAAAAAAHIHI inserted ... s
+DONE... 
+Matched Declarations
+i matched integer 4 4
+Rakam:1VARIABLE_COUT = x2
+i matched integer 9 9
+d
+D:1
+HNAAAAAAAAAAAAAAHIHI inserted ... x2
+DONE... 
+Matched Declarations
+hereSAlemmmmmmm
+3ashry:1VARIABLE_COUT = s2
+i matched double 0.500000 
+d
+D:1
+HNAAAAAAAAAAAAAAHIHI inserted ... s2
+DONE... 
+Matched Declarations
+hereSAlemmmmmmm
+Matched flow control: if
+hereSAlemmmmmmm
+Matched flow control: if

@@ -127,7 +127,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 214 "calc.y"
+#line 292 "calc.y"
 
 	long NUM; 
 	int BOOOL;

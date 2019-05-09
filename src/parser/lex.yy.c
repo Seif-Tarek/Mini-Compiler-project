@@ -843,7 +843,7 @@ YY_RULE_SETUP
 case 22:
 YY_RULE_SETUP
 #line 32 "calc.l"
-{yylval.BOOOL = 2; return TrueFalse;}
+{yylval.BOOOL = 0; return TrueFalse;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
